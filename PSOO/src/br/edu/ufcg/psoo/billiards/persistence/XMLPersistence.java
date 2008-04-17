@@ -349,4 +349,15 @@ public class XMLPersistence implements PersistenceIF {
 		return matchesFound;
 	}
 	
+	public Match findMatchById(String matchId) {
+		ArrayList<Match> matchList = this.getContents(this.xmlPathMatches);
+		
+		for(Match m : matchList) {
+			if(m.getMatchId().equals(matchId))
+				return m;
+		}
+		
+		return null;
+	}
+	
 }
