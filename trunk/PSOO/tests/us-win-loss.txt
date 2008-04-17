@@ -33,7 +33,7 @@ removeAllLeagues
 removeAllUsers
 
 # date format is country-dependent
-dateFormat format=dd/mm/yyyy
+dateFormat format=dd/MM/yyyy
 
 ##################################################################
 # simple case - everything nice and rosy
