@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.User;
@@ -190,7 +191,7 @@ public class XMLPersistence implements PersistenceIF {
 		ArrayList<UserLeague> usersAndLeagues = this
 				.getContents(this.xmlPathUserLeague);
 		UserLeague userleague = new UserLeague(user.getUserId(), league
-				.getLeagueId(), initialHandCap);
+				.getLeagueId(), initialHandCap, Calendar.getInstance().getTime());
 
 		if (usersAndLeagues.contains(userleague))
 			usersAndLeagues.remove(userleague);
@@ -198,6 +199,23 @@ public class XMLPersistence implements PersistenceIF {
 		usersAndLeagues.add(userleague);
 		this.createContents(this.xmlPathUserLeague, this.stream
 				.toXML(usersAndLeagues));
+	}
+	
+	public void saveUserLeague(UserLeague userLeague) {
+		this.saveObject(userLeague, this.xmlPathUserLeague);
+	}
+	
+	public UserLeague getUserLeague(User user, League league) {
+		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);
+		
+		for(UserLeague ul : userLeagueList) {
+			if(ul.getUserId().equals(user.getUserId()) && ul.getLeagueId().equals(league.getLeagueId())) {
+				return ul;
+			}
+		}
+		
+		return null;
+		
 	}
 	
 	public League findLeagueById(String id) {
@@ -302,8 +320,6 @@ public class XMLPersistence implements PersistenceIF {
 		}
 		
 		return usersFound;
-	}	
-	
-	
+	}
 	
 }

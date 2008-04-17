@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.User;
+import br.edu.ufcg.psoo.billiards.beans.UserLeague;
 import br.edu.ufcg.psoo.billiards.beans.WinLoss;
 
 public interface PersistenceIF {
@@ -56,5 +57,9 @@ public interface PersistenceIF {
 	public void deleteWinLoss(WinLoss winLoss);
 	
 	public void deleteAllWinLoss();
+	
+	public void saveUserLeague(UserLeague userLeague);
+	
+	public UserLeague getUserLeague(User user, League league);
 
 }
