@@ -312,6 +312,8 @@ public class XMLPersistence implements PersistenceIF {
 	public ArrayList<User> findUsersByLeague(League league) {
 		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);				
 		ArrayList<User> usersFound 			 = new ArrayList<User>();
+				
+		usersFound.add(this.findUserById(league.getOperator()));
 		
 		for(UserLeague ul : userLeagueList) {
 			if(ul.getLeagueId().equals(league.getLeagueId())) {
