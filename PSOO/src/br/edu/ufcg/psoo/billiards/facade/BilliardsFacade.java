@@ -668,6 +668,35 @@ public class BilliardsFacade {
 				loserId, leagueId, dateFomat.parse(date));
 		persistence.saveMatch(match);
 	}
+	
+	/**
+	 * 
+	 * @param leagueId
+	 * @param index
+	 * @return
+	 */
+	public String getMatch(String leagueId, Integer index) {
+		League league = persistence.findLeagueById(leagueId);
+		ArrayList<Match> list = persistence.findMatchesByLeague(league);
+		return list.get(index-1).getMatchId();
+	}
+	
+	public String getMatchDate(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		StringBuilder ret= new StringBuilder(dateFomat.format(match.getCreationDate()));
+		return ret.toString();
+	}
+	
+	public String getMatchWinner(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		return match.getUserIdWinner();
+	}
+	
+	public String getMatchLoser(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		return match.getUserIdLoser();
+	}
+	
 
 	/***************************************************************************
 	 * Shared methods ******************
