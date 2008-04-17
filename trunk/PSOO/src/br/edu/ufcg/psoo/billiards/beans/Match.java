@@ -7,11 +7,12 @@ public class Match {
 	private String userIdWinner;
 	private String userIdLoser;
 	private String leagueId;
+	private String matchId;
 	private Date creationDate;
 	
 	public Match() {}
 
-	public Match(String userIdWinner, String userIdLoser, String leagueId, Date creationDate) {
+	public Match(String matchId, String userIdWinner, String userIdLoser, String leagueId, Date creationDate) {
 		this.userIdWinner = userIdWinner;
 		this.userIdLoser  = userIdLoser;
 		this.leagueId     = leagueId;
@@ -48,6 +49,20 @@ public class Match {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	/**
+	 * @return the matchId
+	 */
+	public String getMatchId() {
+		return matchId;
+	}
+
+	/**
+	 * @param matchId the matchId to set
+	 */
+	public void setMatchId(String matchId) {
+		this.matchId = matchId;
 	}
 	
 }

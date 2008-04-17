@@ -273,9 +273,9 @@ public class XMLPersistence implements PersistenceIF {
 		return this.getContents(this.xmlPathUserLeague);
 	}
 	
-	public void deleteAllWinLoss() {
+/*	public void deleteAllMatches() {
 		this.deleteAllObjects(this.xmlPathMatches);
-	}
+	}*/
 
 	public ArrayList<Match> getAllMatches() {
 		return this.getContents(this.xmlPathMatches);
