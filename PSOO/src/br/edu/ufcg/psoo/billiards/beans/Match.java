@@ -2,16 +2,16 @@ package br.edu.ufcg.psoo.billiards.beans;
 
 import java.util.Date;
 
-public class Matches {
+public class Match {
 	
 	private String userIdWinner;
 	private String userIdLoser;
 	private String leagueId;
 	private Date creationDate;
 	
-	public Matches() {}
+	public Match() {}
 
-	public Matches(String userIdWinner, String userIdLoser, String leagueId, Date creationDate) {
+	public Match(String userIdWinner, String userIdLoser, String leagueId, Date creationDate) {
 		this.userIdWinner = userIdWinner;
 		this.userIdLoser  = userIdLoser;
 		this.leagueId     = leagueId;

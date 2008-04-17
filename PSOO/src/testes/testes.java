@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Random;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
-import br.edu.ufcg.psoo.billiards.beans.Matches;
+import br.edu.ufcg.psoo.billiards.beans.Match;
 import br.edu.ufcg.psoo.billiards.beans.User;
 import br.edu.ufcg.psoo.billiards.beans.UserLeague;
 import br.edu.ufcg.psoo.billiards.persistence.XMLPersistence;
@@ -20,7 +20,7 @@ import com.thoughtworks.xstream.XStream;
 public class testes {
 	
 	public static void main(String[] args) {
-		
+/*		
 			XMLPersistence p = new XMLPersistence();
 			p.setDatabase("teste");
 			
@@ -55,18 +55,18 @@ public class testes {
 			Matches m = new Matches(u2.getUserId(), u3.getUserId(), l.getLeagueId(), Calendar.getInstance().getTime());
 			p.saveWinLoss(m);
 			
-/*			ArrayList<User> users = p.findUsersByLeague(l);
+			ArrayList<User> users = p.findUsersByLeague(l);
 			
 			for(User u : users) {
 				System.out.println(u.getFirstName());
 			}
-*/			
+			
 			ArrayList<Matches> mat = p.findMatchesByLeague(l);
 			
 			for(Matches mt : mat) {
 				System.out.println(mt.getUserIdLoser());
 				System.out.println(mt.getUserIdWinner());
-			}
+			}*/
 
 		
 	}

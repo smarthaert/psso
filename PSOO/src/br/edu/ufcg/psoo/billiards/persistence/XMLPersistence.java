@@ -11,7 +11,7 @@ import java.util.Calendar;
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.User;
 import br.edu.ufcg.psoo.billiards.beans.UserLeague;
-import br.edu.ufcg.psoo.billiards.beans.Matches;
+import br.edu.ufcg.psoo.billiards.beans.Match;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
@@ -277,19 +277,19 @@ public class XMLPersistence implements PersistenceIF {
 		this.deleteAllObjects(this.xmlPathMatches);
 	}
 
-	public ArrayList<Matches> getAllWinLoss() {
+	public ArrayList<Match> getAllMatches() {
 		return this.getContents(this.xmlPathMatches);
 	}
 
-	public void deleteWinLoss(Matches winLoss) {
-		ArrayList<Matches> winLossList = this.getAllWinLoss();
+	public void deleteMatch(Match winLoss) {
+		ArrayList<Match> winLossList = this.getAllMatches();
 		
 		winLossList.remove(winLoss);
 		
 		this.createContents(this.xmlPathMatches, this.stream.toXML(winLossList));		
 	}
 
-	public void saveWinLoss(Matches winLoss) {
+	public void saveMatch(Match winLoss) {
 		this.saveObject(winLoss, this.xmlPathMatches);
 	}
 
@@ -336,11 +336,11 @@ public class XMLPersistence implements PersistenceIF {
 	}
 
 
-	public ArrayList<Matches> findMatchesByLeague(League league) {
-		ArrayList<Matches> matches 		= this.getContents(this.xmlPathMatches);
-		ArrayList<Matches> matchesFound = new ArrayList<Matches>();
+	public ArrayList<Match> findMatchesByLeague(League league) {
+		ArrayList<Match> matches 		= this.getContents(this.xmlPathMatches);
+		ArrayList<Match> matchesFound = new ArrayList<Match>();
 		
-		for(Matches m : matches) {
+		for(Match m : matches) {
 			if(m.getLeagueId().equals(league.getLeagueId())) {
 				matchesFound.add(m);
 			}
