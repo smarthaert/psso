@@ -6,6 +6,7 @@ package br.edu.ufcg.psoo.billiards.facade;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +39,7 @@ public class BilliardsFacade {
 	public BilliardsFacade() {
 		random = new Random();
 		persistence = new XMLPersistence();
+		dateFomat = new SimpleDateFormat("dd/MM/yyyy");
 	}
 
 	/**
@@ -314,6 +316,11 @@ public class BilliardsFacade {
 		}
 		try {
 			Object ret = getField(League.class, attribute, league);
+			if (attribute.equals("creationDate") && ret != null) {
+				Date date = (Date) ret;
+				ret = new StringBuilder(dateFomat.format(date)).toString();
+
+			}
 			return ret;
 		} catch (Exception e) {
 			Exception ex = new Exception("Unknown league attribute");
@@ -327,8 +334,9 @@ public class BilliardsFacade {
 	 * 
 	 * @return
 	 */
-	public Date todaysDate() {
-		return Calendar.getInstance().getTime();
+	public String todaysDate() {
+		return new StringBuilder(dateFomat.format(Calendar.getInstance()
+				.getTime())).toString();
 	}
 
 	/**
@@ -533,6 +541,11 @@ public class BilliardsFacade {
 		}
 		try {
 			Object ret = getField(UserLeague.class, attribute, uleague);
+			if (attribute.equals("joinDate") && ret != null) {
+				Date date = (Date) ret;
+				ret = new StringBuilder(dateFomat.format(date)).toString();
+
+			}
 			return ret;
 		} catch (Exception e) {
 			Exception ex = new Exception("Unknown user attribute");
@@ -660,15 +673,45 @@ public class BilliardsFacade {
 	 * @param date
 	 * @param winnerId
 	 * @param loserId
+	 * @return
 	 * @throws Exception
 	 */
-	public void addMatchResult(String leagueId, String date, String winnerId,
+	public String addMatchResult(String leagueId, String date, String winnerId,
 			String loserId) throws Exception {
-		Match match = new Match(String.valueOf(random.nextLong()), winnerId,
-				loserId, leagueId, dateFomat.parse(date));
-		persistence.saveMatch(match);
+		return addMatchResult(leagueId, date, winnerId, loserId, null, null,
+				null, null);
 	}
-	
+
+	/**
+	 * 
+	 * @param leagueId
+	 * @param date
+	 * @param winnerId
+	 * @param loserId
+	 * @param lenght
+	 * @param score
+	 * @param longestRunForWinner
+	 * @param longestRunForLoser
+	 * @return
+	 * @throws Exception
+	 */
+	public String addMatchResult(String leagueId, String date, String winnerId,
+			String loserId, Integer lenght, Integer score,
+			Integer longestRunForWinner, Integer longestRunForLoser)
+			throws Exception {
+		String id = String.valueOf(random.nextLong());
+		Date date2;
+		try {
+			date2 = dateFomat.parse(date);
+			Match match = new Match(id, winnerId, loserId, leagueId, lenght,
+					score, longestRunForWinner, longestRunForLoser, date2);
+			persistence.saveMatch(match);
+			return id;
+		} catch (ParseException e) {
+			throw new Exception("Invalid date");
+		}
+	}
+
 	/**
 	 * 
 	 * @param leagueId
@@ -678,15 +721,16 @@ public class BilliardsFacade {
 	public String getMatch(String leagueId, Integer index) {
 		League league = persistence.findLeagueById(leagueId);
 		ArrayList<Match> list = persistence.findMatchesByLeague(league);
-		return list.get(index-1).getMatchId();
+		return list.get(index - 1).getMatchId();
 	}
-	
+
 	public String getMatchDate(String matchId) {
 		Match match = persistence.findMatchById(matchId);
-		StringBuilder ret= new StringBuilder(dateFomat.format(match.getCreationDate()));
+		StringBuilder ret = new StringBuilder(dateFomat.format(match
+				.getCreationDate()));
 		return ret.toString();
 	}
-	
+
 	/**
 	 * 
 	 * @param matchId
@@ -696,7 +740,7 @@ public class BilliardsFacade {
 		Match match = persistence.findMatchById(matchId);
 		return match.getUserIdWinner();
 	}
-	
+
 	/**
 	 * 
 	 * @param matchId
@@ -706,7 +750,7 @@ public class BilliardsFacade {
 		Match match = persistence.findMatchById(matchId);
 		return match.getUserIdLoser();
 	}
-	
+
 	/**
 	 * 
 	 * @param matchId
@@ -714,11 +758,10 @@ public class BilliardsFacade {
 	 */
 	public String getMatchLength(String matchId) {
 		Match match = persistence.findMatchById(matchId);
-		String ret = String.valueOf(match.getLenght());
-		ret = (ret==null)?"":ret;
-		return ret;	
+		Integer integer = match.getLength();
+		return (integer == null) ? "" : String.valueOf(integer);
 	}
-	
+
 	/**
 	 * 
 	 * @param matchId
@@ -726,11 +769,10 @@ public class BilliardsFacade {
 	 */
 	public String getMatchScore(String matchId) {
 		Match match = persistence.findMatchById(matchId);
-		String ret = String.valueOf(match.getScore());
-		ret = (ret==null)?"":ret;
-		return ret;
+		Integer ret = match.getScore();
+		return (ret == null) ? "" : String.valueOf(ret);
 	}
-	
+
 	/**
 	 * 
 	 * @param matchId
@@ -738,11 +780,10 @@ public class BilliardsFacade {
 	 */
 	public String getMatchLongestRunForWinner(String matchId) {
 		Match match = persistence.findMatchById(matchId);
-		String ret = String.valueOf(match.getLongestRunForWinner());
-		ret = (ret==null)?"":ret;
-		return ret;
+		Integer ret = match.getLongestRunForWinner();
+		return (ret == null) ? "" : String.valueOf(ret);
 	}
-	
+
 	/**
 	 * 
 	 * @param matchId
@@ -750,11 +791,45 @@ public class BilliardsFacade {
 	 */
 	public String getMatchLongestRunForLoser(String matchId) {
 		Match match = persistence.findMatchById(matchId);
-		String ret = String.valueOf(match.getLongestRunForLoser());
-		ret = (ret==null)?"":ret;
-		return ret;
+		Integer ret = match.getLongestRunForLoser();
+		return (ret == null) ? "" : String.valueOf(ret);
 	}
-	
+
+	/**
+	 * 
+	 * @param matchId
+	 * @param date
+	 * @param winnerId
+	 * @param loserId
+	 * @param length
+	 * @param score
+	 * @param longestRunForWinner
+	 * @param longestRunForLoser
+	 * @throws Exception
+	 */
+	public void updateMatchResult(String matchId, String date, String winnerId,
+			String loserId, Integer length, Integer score,
+			Integer longestRunForWinner, Integer longestRunForLoser)
+			throws Exception {
+		Match match = persistence.findMatchById(matchId);
+		try {
+			Date date2 = dateFomat.parse(date);
+			match.setCreationDate(date2);
+			match.setUserIdWinner(winnerId);
+			match.setUserIdLoser(loserId);
+			match.setLength(length);
+			match.setScore(score);
+			match.setLongestRunForWinner(longestRunForWinner);
+			match.setLongestRunForLoser(longestRunForLoser);
+
+			persistence.saveMatch(match);
+
+		} catch (ParseException e) {
+			Exception ex = new Exception("Invalid date");
+			ex.setStackTrace(e.getStackTrace());
+			throw ex;
+		}
+	}
 
 	/***************************************************************************
 	 * Shared methods ******************
