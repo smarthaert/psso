@@ -6,6 +6,7 @@ package br.edu.ufcg.psoo.billiards.facade;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
+import br.edu.ufcg.psoo.billiards.beans.Match;
 import br.edu.ufcg.psoo.billiards.beans.User;
 import br.edu.ufcg.psoo.billiards.beans.UserLeague;
 import br.edu.ufcg.psoo.billiards.persistence.PersistenceIF;
@@ -30,6 +32,8 @@ public class BilliardsFacade {
 	private Random random;
 
 	private PersistenceIF persistence;
+
+	private SimpleDateFormat dateFomat;
 
 	public BilliardsFacade() {
 		random = new Random();
@@ -352,9 +356,10 @@ public class BilliardsFacade {
 		persistence.deleteLeague(league);
 	}
 
-	public Boolean isLeagueMember(String idUser, String idLeague) throws Exception {
+	public Boolean isLeagueMember(String idUser, String idLeague)
+			throws Exception {
 		User user = persistence.findUserById(idUser);
-		if (user==null) {
+		if (user == null) {
 			throw new Exception("Unknown user");
 		}
 		League league = persistence.findLeagueById(idLeague);
@@ -372,7 +377,7 @@ public class BilliardsFacade {
 		}
 
 		ArrayList<League> leagues = persistence.findLeaguesByUser(user);
-		if (leagues.size()==0) {
+		if (leagues.size() == 0) {
 			return "";
 		}
 		String ret = "";
@@ -399,55 +404,54 @@ public class BilliardsFacade {
 	}
 
 	public void dateFormat(String format) {
-
+		dateFomat = new SimpleDateFormat(format);
 	}
 
-	public void joinLeague(String userId, String leagueid,
-			String initialHandcap) throws Exception {
+	public void joinLeague(String userId, String leagueid, String initialHandcap)
+			throws Exception {
 		User user = persistence.findUserById(userId);
-		if (user==null) {
+		if (user == null) {
 			throw new Exception("Unknown user");
-		} 
-		
+		}
+
 		League league = persistence.findLeagueById(leagueid);
-		
-		if (league==null) {
+
+		if (league == null) {
 			throw new Exception("Unknown league");
-		} 
-		
-		if (initialHandcap==null||initialHandcap.equals("")) {
+		}
+
+		if (initialHandcap == null || initialHandcap.equals("")) {
 			throw new Exception("Must provide initial player handicap");
 		}
-		
+
 		Integer integer = Integer.parseInt(initialHandcap);
-		
-		if (integer<0) {
+
+		if (integer < 0) {
 			throw new Exception("Handicap cant be negative");
 		}
-		
+
 		ArrayList<User> list = persistence.findUsersByLeague(league);
 		if (list.contains(user)) {
 			throw new Exception("User is already a league member");
-		} 
-		
-		
+		}
 
 		persistence.putPlayerIntoLeague(league, user, integer);
 
 	}
 
-	public Object getUserLeagueAttribute(String userId, String leagueId, String attribute) throws Exception {
-		attribute = (attribute==null)?"":attribute;
+	public Object getUserLeagueAttribute(String userId, String leagueId,
+			String attribute) throws Exception {
+		attribute = (attribute == null) ? "" : attribute;
 		User user = persistence.findUserById(userId);
-		if (user==null) {
+		if (user == null) {
 			throw new Exception("Unknown user");
-		} 
-		
-		League  league = persistence.findLeagueById(leagueId);
-		if (league==null) {
+		}
+
+		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
 			throw new Exception("Unknown league");
 		}
-		
+
 		UserLeague uleague = persistence.getUserLeague(user, league);
 		if (uleague == null) {
 			throw new Exception("User is not a league member");
@@ -460,34 +464,74 @@ public class BilliardsFacade {
 			ex.setStackTrace(e.getStackTrace());
 			throw ex;
 		}
-		
+
 	}
-	
+
 	public void leaveLeague(String userId, String leagueId) throws Exception {
 		User user = persistence.findUserById(userId);
-		if (user==null) {
+		if (user == null) {
 			throw new Exception("Unknown user");
 		}
-		
+
 		League league = persistence.findLeagueById(leagueId);
-		if (league==null) {
+		if (league == null) {
 			throw new Exception("Unknown league");
 		}
-		
+
 		if (!persistence.findUsersByLeague(league).contains(user)) {
 			throw new Exception("User is not a league member");
 		}
-		
+
 		if (league.getOperator().equals(user.getUserId())) {
 			throw new Exception("Operator cannot leave league");
 		}
-		
+
 		persistence.leaveLeague(user, league);
-		
+
 	}
 
-	public String getNumberOfMatches(String leagueId) {
-		return null;
+	public Integer getNumberOfMatches(String leagueId) throws Exception {
+		return getMatches(leagueId).size();
+	}
+
+	private ArrayList<Match> getMatches(String leagueId) throws Exception {
+		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
+			throw new Exception("Unknown league");
+		}
+
+		return persistence.findMatchesByLeague(league);
+	}
+
+	public Integer getNumberOfWins(String userId, String leagueId) throws Exception {
+		ArrayList<Match> list = getMatches(leagueId);
+		int i = 0;
+		for (Match matches : list) {
+			if (matches.getUserIdWinner().equals(userId)) {
+				i++;
+			}
+		}
+		return i;
+	}
+
+	public Integer getNumberOfMatches(String userId, String leagueId)
+			throws Exception {
+		ArrayList<Match> list = getMatches(leagueId);
+		int i = 0;
+		for (Match matches : list) {
+			if (matches.getUserIdLoser().equals(userId)
+					|| matches.getUserIdWinner().equals(userId)) {
+				i++;
+			}
+		}
+		return i;
+	}
+
+	public void addMatchResult(String leagueId, String date, String winnerId,
+			String loserId) throws Exception {
+		Match match = new Match(winnerId, loserId, leagueId, dateFomat
+				.parse(date));
+		persistence.saveMatch(match);
 	}
 
 	/***************************************************************************
