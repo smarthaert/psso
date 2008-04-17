@@ -61,5 +61,7 @@ public interface PersistenceIF {
 	public void saveUserLeague(UserLeague userLeague);
 	
 	public UserLeague getUserLeague(User user, League league);
+	
+	public void leaveLeague(User user, League league);
 
 }
