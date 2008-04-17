@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.User;
 import br.edu.ufcg.psoo.billiards.beans.UserLeague;
-import br.edu.ufcg.psoo.billiards.beans.WinLoss;
+import br.edu.ufcg.psoo.billiards.beans.Matches;
 
 public interface PersistenceIF {
 
@@ -50,11 +50,11 @@ public interface PersistenceIF {
 	//-----------------------------------------------------
 	
 	//--- Methods responsible for win/loss 's manager
-	public void saveWinLoss(WinLoss winLoss);
+	public void saveWinLoss(Matches winLoss);
 	
-	public ArrayList<WinLoss> getAllWinLoss();
+	public ArrayList<Matches> getAllWinLoss();
 	
-	public void deleteWinLoss(WinLoss winLoss);
+	public void deleteWinLoss(Matches winLoss);
 	
 	public void deleteAllWinLoss();
 	
@@ -63,5 +63,7 @@ public interface PersistenceIF {
 	public UserLeague getUserLeague(User user, League league);
 	
 	public void leaveLeague(User user, League league);
+	
+	public ArrayList<Matches> findMatchesByLeague(League league);
 
 }
