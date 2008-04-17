@@ -472,6 +472,7 @@ public class BilliardsFacade {
 	 * @param format
 	 */
 	public void dateFormat(String format) {
+		format = format.replace("mm", "MM");
 		dateFomat = new SimpleDateFormat(format);
 	}
 
@@ -830,6 +831,17 @@ public class BilliardsFacade {
 			throw ex;
 		}
 	}
+
+	/**
+	 * 
+	 * @param matchId
+	 */
+	public void deleteMatch(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		persistence.deleteMatch(match);
+	}
+	
+	
 
 	/***************************************************************************
 	 * Shared methods ******************

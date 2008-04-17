@@ -17,8 +17,7 @@ public class Match {
 	public Match() {
 	}
 
-/*	 (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+
 	 
 	@Override
 	public boolean equals(Object obj) {
@@ -28,7 +27,7 @@ public class Match {
 		}
 		return false;
 	}
-*/
+
 	/**
 	 * @param userIdWinner
 	 * @param userIdLoser
