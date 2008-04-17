@@ -27,7 +27,7 @@ public interface PersistenceIF {
 	
 	public void deleteAllUsers();
 	
-	public ArrayList<User> getUsersByLeague(League league);
+	public ArrayList<User> findUsersByLeague(League league);
 	//----------------------------------------------------------
 	
 	//--- Methods responsible for league's manager
@@ -45,7 +45,7 @@ public interface PersistenceIF {
 	
 	public ArrayList<League> findLeagueByName(String name);
 	
-	public ArrayList<League> getLeaguesByUser(User user);
+	public ArrayList<League> findLeaguesByUser(User user);
 	//-----------------------------------------------------
 	
 	//--- Methods responsible for win/loss 's manager

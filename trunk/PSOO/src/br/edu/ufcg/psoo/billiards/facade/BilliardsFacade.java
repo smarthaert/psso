@@ -355,8 +355,46 @@ public class BilliardsFacade {
 	}
 	
 
+	public Boolean isLeagueMember(String idUser, String idLeague) {
+		User user = persistence.findUserById(idUser);
+		League league = persistence.findLeagueById(idLeague);
+		if (user==null||league==null) {
+			return false;
+		}
+		ArrayList<User> users = persistence.findUsersByLeague(league);
+		return users.contains(user);		
+	}
 	
+	public String getPlayerLeague(String userId) throws Exception {
+		User user = persistence.findUserById(userId);
+		if (user==null) {
+			throw new Exception("Unknown user with id " + userId);
+		}
+		
+		ArrayList<League> leagues = persistence.findLeaguesByUser(user);
+		String ret="";			
+		for (League l : leagues) {
+			ret += l.getName() + ", ";
+		}
+		return ret.substring(0, ret.length() - 2);		
+	}
 	
+	public String getLeagueMembers(String leagueId) throws Exception {
+		League league = persistence.findLeagueById(leagueId);
+		
+		if (league==null) {
+			throw new Exception("Could not find league with id " + leagueId);
+		}
+		
+		ArrayList<User> users = persistence.findUsersByLeague(league);
+		String ret = "";
+		for (User user : users) {
+			ret+=user.getLastName() + ", ";
+		}
+		return ret.substring(0, ret.length() - 2);
+		
+		
+	}
 	
 
 	public void dateFormat(String format) {
@@ -364,7 +402,12 @@ public class BilliardsFacade {
 	}
 	
 	
-	public void joinLeague(String userId, String leagueid, String initialHandcap) {
+	public void joinLeague(String userId, String leagueid, Integer initialHandcap) {
+		League league = persistence.findLeagueById(leagueid);
+		User user = persistence.findUserById(userId);
+		
+		persistence.putPlayerIntoLeague(league, user, initialHandcap);
+		
 		
 	}
 	
