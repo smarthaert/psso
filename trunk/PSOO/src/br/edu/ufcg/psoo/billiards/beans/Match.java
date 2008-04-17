@@ -13,6 +13,7 @@ public class Match {
 	public Match() {}
 
 	public Match(String matchId, String userIdWinner, String userIdLoser, String leagueId, Date creationDate) {
+		this.matchId	  = matchId;
 		this.userIdWinner = userIdWinner;
 		this.userIdLoser  = userIdLoser;
 		this.leagueId     = leagueId;
