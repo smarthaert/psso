@@ -52,7 +52,7 @@ public class BilliardsFacade {
 	 * This method removes all matches from persistence
 	 */
 	public void removeAllMatches() {
-		// persistence.deleteAllMatches();
+		persistence.deleteAllMatches();
 	}
 
 	/**
@@ -232,6 +232,12 @@ public class BilliardsFacade {
 		persistence.removeUser(persistence.findUserById(id));
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
 	public String findLeague(String name) throws Exception {
 		List<League> league = persistence.findLeagueByName(name);
 		if (league.size() == 0) {
@@ -255,6 +261,13 @@ public class BilliardsFacade {
 		return ret;
 	}
 
+	/**
+	 * 
+	 * @param name
+	 * @param operator
+	 * @return
+	 * @throws Exception
+	 */
 	public String createLeague(String name, String operator) throws Exception {
 		if (name == null || name.equals("")) {
 			throw new Exception("Required data: league name");
@@ -285,6 +298,13 @@ public class BilliardsFacade {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @param idLeague
+	 * @param attribute
+	 * @return
+	 * @throws Exception
+	 */
 	public Object getLeagueAttribute(String idLeague, String attribute)
 			throws Exception {
 
@@ -303,10 +323,21 @@ public class BilliardsFacade {
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Date todaysDate() {
 		return Calendar.getInstance().getTime();
 	}
 
+	/**
+	 * 
+	 * @param idLeague
+	 * @param attribute
+	 * @param value
+	 * @throws Exception
+	 */
 	public void changeLeagueAttribute(String idLeague, String attribute,
 			String value) throws Exception {
 		League league = persistence.findLeagueById(idLeague);
@@ -348,6 +379,12 @@ public class BilliardsFacade {
 
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param id
+	 * @throws Exception
+	 */
 	public void deleteLeague(String id) throws Exception {
 		League league = persistence.findLeagueById(id);
 		if (league == null)
@@ -356,6 +393,13 @@ public class BilliardsFacade {
 		persistence.deleteLeague(league);
 	}
 
+	/**
+	 * 
+	 * @param idUser
+	 * @param idLeague
+	 * @return
+	 * @throws Exception
+	 */
 	public Boolean isLeagueMember(String idUser, String idLeague)
 			throws Exception {
 		User user = persistence.findUserById(idUser);
@@ -370,6 +414,12 @@ public class BilliardsFacade {
 		return users.contains(user);
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
 	public String getPlayerLeagues(String userId) throws Exception {
 		User user = persistence.findUserById(userId);
 		if (user == null) {
@@ -387,6 +437,12 @@ public class BilliardsFacade {
 		return ret.substring(0, ret.length() - 2);
 	}
 
+	/**
+	 * 
+	 * @param leagueId
+	 * @return
+	 * @throws Exception
+	 */
 	public String getLeagueMembers(String leagueId) throws Exception {
 		League league = persistence.findLeagueById(leagueId);
 
@@ -403,10 +459,21 @@ public class BilliardsFacade {
 
 	}
 
+	/**
+	 * 
+	 * @param format
+	 */
 	public void dateFormat(String format) {
 		dateFomat = new SimpleDateFormat(format);
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @param leagueid
+	 * @param initialHandcap
+	 * @throws Exception
+	 */
 	public void joinLeague(String userId, String leagueid, String initialHandcap)
 			throws Exception {
 		User user = persistence.findUserById(userId);
@@ -439,6 +506,14 @@ public class BilliardsFacade {
 
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @param leagueId
+	 * @param attribute
+	 * @return
+	 * @throws Exception
+	 */
 	public Object getUserLeagueAttribute(String userId, String leagueId,
 			String attribute) throws Exception {
 		attribute = (attribute == null) ? "" : attribute;
@@ -467,6 +542,12 @@ public class BilliardsFacade {
 
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @param leagueId
+	 * @throws Exception
+	 */
 	public void leaveLeague(String userId, String leagueId) throws Exception {
 		User user = persistence.findUserById(userId);
 		if (user == null) {
@@ -490,10 +571,22 @@ public class BilliardsFacade {
 
 	}
 
+	/**
+	 * 
+	 * @param leagueId
+	 * @return
+	 * @throws Exception
+	 */
 	public Integer getNumberOfMatches(String leagueId) throws Exception {
 		return getMatches(leagueId).size();
 	}
 
+	/**
+	 * 
+	 * @param leagueId
+	 * @return
+	 * @throws Exception
+	 */
 	private ArrayList<Match> getMatches(String leagueId) throws Exception {
 		League league = persistence.findLeagueById(leagueId);
 		if (league == null) {
@@ -503,7 +596,15 @@ public class BilliardsFacade {
 		return persistence.findMatchesByLeague(league);
 	}
 
-	public Integer getNumberOfWins(String userId, String leagueId) throws Exception {
+	/**
+	 * 
+	 * @param userId
+	 * @param leagueId
+	 * @return
+	 * @throws Exception
+	 */
+	public Integer getNumberOfWins(String userId, String leagueId)
+			throws Exception {
 		ArrayList<Match> list = getMatches(leagueId);
 		int i = 0;
 		for (Match matches : list) {
@@ -514,6 +615,32 @@ public class BilliardsFacade {
 		return i;
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @param leagueId
+	 * @return
+	 * @throws Exception
+	 */
+	public Integer getNumberOfLosses(String userId, String leagueId)
+			throws Exception {
+		ArrayList<Match> list = getMatches(leagueId);
+		int i = 0;
+		for (Match matches : list) {
+			if (matches.getUserIdLoser().equals(userId)) {
+				i++;
+			}
+		}
+		return i;
+	}
+
+	/**
+	 * 
+	 * @param userId
+	 * @param leagueId
+	 * @return
+	 * @throws Exception
+	 */
 	public Integer getNumberOfMatches(String userId, String leagueId)
 			throws Exception {
 		ArrayList<Match> list = getMatches(leagueId);
@@ -527,10 +654,18 @@ public class BilliardsFacade {
 		return i;
 	}
 
+	/**
+	 * 
+	 * @param leagueId
+	 * @param date
+	 * @param winnerId
+	 * @param loserId
+	 * @throws Exception
+	 */
 	public void addMatchResult(String leagueId, String date, String winnerId,
 			String loserId) throws Exception {
-		Match match = new Match(winnerId, loserId, leagueId, dateFomat
-				.parse(date));
+		Match match = new Match(String.valueOf(random.nextLong()), winnerId,
+				loserId, leagueId, dateFomat.parse(date));
 		persistence.saveMatch(match);
 	}
 
