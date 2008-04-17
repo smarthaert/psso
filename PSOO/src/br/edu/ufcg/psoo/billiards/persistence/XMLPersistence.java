@@ -277,7 +277,7 @@ public class XMLPersistence implements PersistenceIF {
 		this.saveObject(winLoss, this.xmlPathWinLoss);
 	}
 
-	public ArrayList<League> getLeaguesByUser(User user) {
+	public ArrayList<League> findLeaguesByUser(User user) {
 		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);				
 		ArrayList<League> leaguesFound 			 = new ArrayList<League>();
 		
@@ -291,7 +291,7 @@ public class XMLPersistence implements PersistenceIF {
 	}
 
 
-	public ArrayList<User> getUsersByLeague(League league) {
+	public ArrayList<User> findUsersByLeague(League league) {
 		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);				
 		ArrayList<User> usersFound 			 = new ArrayList<User>();
 		
