@@ -8,17 +8,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import javax.jws.soap.SOAPBinding.Use;
-
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.User;
+import br.edu.ufcg.psoo.billiards.beans.UserLeague;
 import br.edu.ufcg.psoo.billiards.persistence.PersistenceIF;
 import br.edu.ufcg.psoo.billiards.persistence.XMLPersistence;
 
@@ -50,7 +48,7 @@ public class BilliardsFacade {
 	 * This method removes all matches from persistence
 	 */
 	public void removeAllMatches() {
-		//persistence.deleteAllMatches();
+		// persistence.deleteAllMatches();
 	}
 
 	/**
@@ -353,84 +351,145 @@ public class BilliardsFacade {
 
 		persistence.deleteLeague(league);
 	}
-	
 
-	public Boolean isLeagueMember(String idUser, String idLeague) {
+	public Boolean isLeagueMember(String idUser, String idLeague) throws Exception {
 		User user = persistence.findUserById(idUser);
+		if (user==null) {
+			throw new Exception("Unknown user");
+		}
 		League league = persistence.findLeagueById(idLeague);
-		if (user==null||league==null) {
-			return false;
+		if (league == null) {
+			throw new Exception("Unknown league");
 		}
 		ArrayList<User> users = persistence.findUsersByLeague(league);
-		return users.contains(user);		
+		return users.contains(user);
 	}
-	
-	public String getPlayerLeague(String userId) throws Exception {
+
+	public String getPlayerLeagues(String userId) throws Exception {
 		User user = persistence.findUserById(userId);
-		if (user==null) {
-			throw new Exception("Unknown user with id " + userId);
+		if (user == null) {
+			throw new Exception("Unknown user");
 		}
-		
+
 		ArrayList<League> leagues = persistence.findLeaguesByUser(user);
-		String ret="";			
+		if (leagues.size()==0) {
+			return "";
+		}
+		String ret = "";
 		for (League l : leagues) {
 			ret += l.getName() + ", ";
 		}
-		return ret.substring(0, ret.length() - 2);		
+		return ret.substring(0, ret.length() - 2);
 	}
-	
+
 	public String getLeagueMembers(String leagueId) throws Exception {
 		League league = persistence.findLeagueById(leagueId);
-		
-		if (league==null) {
-			throw new Exception("Could not find league with id " + leagueId);
+
+		if (league == null) {
+			throw new Exception("Unknown league");
 		}
-		
+
 		ArrayList<User> users = persistence.findUsersByLeague(league);
 		String ret = "";
 		for (User user : users) {
-			ret+=user.getLastName() + ", ";
+			ret += user.getLastName() + ", ";
 		}
 		return ret.substring(0, ret.length() - 2);
-		
-		
+
 	}
-	
 
 	public void dateFormat(String format) {
-		
+
 	}
-	
-	
-	public void joinLeague(String userId, String leagueid, Integer initialHandcap) {
-		League league = persistence.findLeagueById(leagueid);
+
+	public void joinLeague(String userId, String leagueid,
+			String initialHandcap) throws Exception {
 		User user = persistence.findUserById(userId);
+		if (user==null) {
+			throw new Exception("Unknown user");
+		} 
 		
-		persistence.putPlayerIntoLeague(league, user, initialHandcap);
+		League league = persistence.findLeagueById(leagueid);
 		
+		if (league==null) {
+			throw new Exception("Unknown league");
+		} 
+		
+		if (initialHandcap==null||initialHandcap.equals("")) {
+			throw new Exception("Must provide initial player handicap");
+		}
+		
+		Integer integer = Integer.parseInt(initialHandcap);
+		
+		if (integer<0) {
+			throw new Exception("Handicap cant be negative");
+		}
+		
+		ArrayList<User> list = persistence.findUsersByLeague(league);
+		if (list.contains(user)) {
+			throw new Exception("User is already a league member");
+		} 
+		
+		
+
+		persistence.putPlayerIntoLeague(league, user, integer);
+
+	}
+
+	public Object getUserLeagueAttribute(String userId, String leagueId, String attribute) throws Exception {
+		attribute = (attribute==null)?"":attribute;
+		User user = persistence.findUserById(userId);
+		if (user==null) {
+			throw new Exception("Unknown user");
+		} 
+		
+		League  league = persistence.findLeagueById(leagueId);
+		if (league==null) {
+			throw new Exception("Unknown league");
+		}
+		
+		UserLeague uleague = persistence.getUserLeague(user, league);
+		if (uleague == null) {
+			throw new Exception("User is not a league member");
+		}
+		try {
+			Object ret = getField(UserLeague.class, attribute, uleague);
+			return ret;
+		} catch (Exception e) {
+			Exception ex = new Exception("Unknown user attribute");
+			ex.setStackTrace(e.getStackTrace());
+			throw ex;
+		}
 		
 	}
 	
+	public void leaveLeague(String userId, String leagueId) throws Exception {
+		User user = persistence.findUserById(userId);
+		if (user==null) {
+			throw new Exception("Unknown user");
+		}
+		
+		League league = persistence.findLeagueById(leagueId);
+		if (league==null) {
+			throw new Exception("Unknown league");
+		}
+		
+		if (!persistence.findUsersByLeague(league).contains(user)) {
+			throw new Exception("User is not a league member");
+		}
+		
+		if (league.getOperator().equals(user.getUserId())) {
+			throw new Exception("Operator cannot leave league");
+		}
+		
+		persistence.leaveLeague(user, league);
+		
+	}
+
 	public String getNumberOfMatches(String leagueId) {
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/***************************************************************************
 	 * Shared methods ******************
 	 * 
