@@ -687,14 +687,72 @@ public class BilliardsFacade {
 		return ret.toString();
 	}
 	
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
 	public String getMatchWinner(String matchId) {
 		Match match = persistence.findMatchById(matchId);
 		return match.getUserIdWinner();
 	}
 	
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
 	public String getMatchLoser(String matchId) {
 		Match match = persistence.findMatchById(matchId);
 		return match.getUserIdLoser();
+	}
+	
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
+	public String getMatchLength(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		String ret = String.valueOf(match.getLenght());
+		ret = (ret==null)?"":ret;
+		return ret;	
+	}
+	
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
+	public String getMatchScore(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		String ret = String.valueOf(match.getScore());
+		ret = (ret==null)?"":ret;
+		return ret;
+	}
+	
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
+	public String getMatchLongestRunForWinner(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		String ret = String.valueOf(match.getLongestRunForWinner());
+		ret = (ret==null)?"":ret;
+		return ret;
+	}
+	
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
+	public String getMatchLongestRunForLoser(String matchId) {
+		Match match = persistence.findMatchById(matchId);
+		String ret = String.valueOf(match.getLongestRunForLoser());
+		ret = (ret==null)?"":ret;
+		return ret;
 	}
 	
 
