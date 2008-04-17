@@ -15,9 +15,23 @@ public class Match {
 	private Date creationDate;
 	
 	public Match() {}
+	
+	/**
+	 * @param userIdWinner
+	 * @param userIdLoser
+	 * @param leagueId
+	 * @param matchId
+	 * @param creationDate
+	 */
+	public Match(String matchId, String userIdWinner, String userIdLoser, String leagueId, Date creationDate) {
+		super();
+		this.userIdWinner = userIdWinner;
+		this.userIdLoser = userIdLoser;
+		this.leagueId = leagueId;
+		this.matchId = matchId;
+		this.creationDate = creationDate;
+	}
 
-	
-	
 	/**
 	 * @param userIdWinner
 	 * @param userIdLoser
