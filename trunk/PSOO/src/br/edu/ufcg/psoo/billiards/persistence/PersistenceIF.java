@@ -65,5 +65,7 @@ public interface PersistenceIF {
 	public void leaveLeague(User user, League league);
 	
 	public ArrayList<Match> findMatchesByLeague(League league);
+	
+	public Match findMatchById(String matchId);
 
 }
