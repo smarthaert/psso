@@ -26,7 +26,7 @@ public interface PersistenceIF {
 			
 	public void removeUser(User userId);
 	
-	public void deleteAllUsers();
+	public void removeAllUsers();
 	
 	public ArrayList<User> findUsersByLeague(League league);
 	//----------------------------------------------------------
@@ -34,11 +34,11 @@ public interface PersistenceIF {
 	//--- Methods responsible for league's manager
 	public void saveLeague(League league);	
 		
-	public void deleteAllLeagues();
+	public void removeAllLeagues();
 	
 	public ArrayList<League> getLeagues();
 	
-	public void deleteLeague(League league);
+	public void removeLeague(League league);
 	
 	public void putPlayerIntoLeague(League league, User userm, Integer initialHandCap);
 	
@@ -54,9 +54,9 @@ public interface PersistenceIF {
 	
 	public ArrayList<Match> getAllMatches();
 	
-	public void deleteMatch(Match winLoss);
+	public void removeMatch(Match winLoss);
 	
-	public void deleteAllMatches();
+	public void removeAllMatches();
 	
 	public void saveUserLeague(UserLeague userLeague);
 	

@@ -54,21 +54,21 @@ public class BilliardsFacade {
 	 * This method removes all matches from persistence
 	 */
 	public void removeAllMatches() {
-		persistence.deleteAllMatches();
+		persistence.removeAllMatches();
 	}
 
 	/**
 	 * This method removes all leagues from persistence
 	 */
 	public void removeAllLeagues() {
-		persistence.deleteAllLeagues();
+		persistence.removeAllLeagues();
 	}
 
 	/**
 	 * This method removes all users from persistence
 	 */
 	public void removeAllUsers() {
-		persistence.deleteAllUsers();
+		persistence.removeAllUsers();
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class BilliardsFacade {
 		if (league == null)
 			throw new Exception("Unknown league");
 
-		persistence.deleteLeague(league);
+		persistence.removeLeague(league);
 	}
 
 	/**
@@ -838,7 +838,7 @@ public class BilliardsFacade {
 	 */
 	public void deleteMatch(String matchId) {
 		Match match = persistence.findMatchById(matchId);
-		persistence.deleteMatch(match);
+		persistence.removeMatch(match);
 	}
 	
 	
