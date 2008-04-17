@@ -5,8 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
@@ -55,22 +58,28 @@ public class testes {
 			Match m = new Match("0", u2.getUserId(), u3.getUserId(), l.getLeagueId(), Calendar.getInstance().getTime());
 			p.saveMatch(m);
 			
-/*			ArrayList<User> users = p.findUsersByLeague(l);
+			ArrayList<User> users = p.findUsersByLeague(l);
 			
 			for(User u : users) {
 				System.out.println(u.getFirstName());
 			}
-*/			
-/*			ArrayList<Match> mat = p.findMatchesByLeague(l);
+			
+			ArrayList<Match> mat = p.findMatchesByLeague(l);
 			
 			for(Match mt : mat) {
 				System.out.println(mt.getUserIdLoser());
 				System.out.println(mt.getUserIdWinner());
-			}*/
+			}
 
 			Match ma = p.findMatchById("0");
-			System.out.println((ma != null) ? ma.getLeagueId() : "null");
-			
+			System.out.println((ma != null) ? ma.getCreationDate() : "null");
+			try {
+				Date date = new SimpleDateFormat("dd/MM/yyyy").parse("02/12/2007");
+				date.getClass();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
 	}
 
 }

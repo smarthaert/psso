@@ -173,15 +173,15 @@ public class XMLPersistence implements PersistenceIF {
 		f.delete();
 	}
 
-	public void deleteAllUsers() {
+	public void removeAllUsers() {
 		this.deleteAllObjects(this.xmlPathUsers);
 	}
 
-	public void deleteAllLeagues() {
+	public void removeAllLeagues() {
 		this.deleteAllObjects(this.xmlPathLeagues);
 	}
 
-	public void deleteAllMatches() {
+	public void removeAllMatches() {
 		this.deleteAllObjects(this.xmlPathMatches);
 	}
 
@@ -244,7 +244,7 @@ public class XMLPersistence implements PersistenceIF {
 		
 	}
 
-	public void deleteLeague(League league) {
+	public void removeLeague(League league) {
 		ArrayList<League> leagues = this.getLeagues();
 		
 		leagues.remove(league);
@@ -279,7 +279,7 @@ public class XMLPersistence implements PersistenceIF {
 		return this.getContents(this.xmlPathMatches);
 	}
 
-	public void deleteMatch(Match winLoss) {
+	public void removeMatch(Match winLoss) {
 		ArrayList<Match> winLossList = this.getAllMatches();
 		
 		winLossList.remove(winLoss);
