@@ -44,9 +44,15 @@ public class testes {
 			//p.putPlayerIntoLeague(l, u2, 200);
 			//p.putPlayerIntoLeague(l, u3, 200);
 			
-			UserLeague ul = new UserLeague(u2.getUserId(), l.getLeagueId(), 300, Calendar.getInstance().getTime());
+			//UserLeague ul = new UserLeague(u2.getUserId(), l.getLeagueId(), 300, Calendar.getInstance().getTime());
 			
-			p.saveUserLeague(ul);
+			//p.saveUserLeague(ul);
+			
+			ArrayList<User> users = p.findUsersByLeague(l);
+			
+			for(User u : users) {
+				System.out.println(u.getFirstName());
+			}
 		
 	}
 
