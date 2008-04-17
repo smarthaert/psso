@@ -323,5 +323,18 @@ public class XMLPersistence implements PersistenceIF {
 		
 		return usersFound;
 	}
+
+	public void leaveLeague(User user, League league) {
+		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);		
+
+		for(int i=0; i<userLeagueList.size(); i++) {
+			if(userLeagueList.get(i).getUserId().equals(user.getUserId()) && (userLeagueList.get(i).getLeagueId().equals(league.getLeagueId()))) {
+				userLeagueList.remove(i);
+			}
+		}
+		
+		this.createContents(this.xmlPathUserLeague, this.stream.toXML(userLeagueList));
+		
+	}
 	
 }

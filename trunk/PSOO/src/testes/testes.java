@@ -48,6 +48,8 @@ public class testes {
 			
 			//p.saveUserLeague(ul);
 			
+			//p.leaveLeague(u2, l);
+			
 			ArrayList<User> users = p.findUsersByLeague(l);
 			
 			for(User u : users) {
