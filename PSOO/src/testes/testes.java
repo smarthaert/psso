@@ -20,7 +20,7 @@ import com.thoughtworks.xstream.XStream;
 public class testes {
 	
 	public static void main(String[] args) {
-/*		
+		
 			XMLPersistence p = new XMLPersistence();
 			p.setDatabase("teste");
 			
@@ -52,23 +52,25 @@ public class testes {
 			
 			//p.leaveLeague(u2, l);
 			
-			Matches m = new Matches(u2.getUserId(), u3.getUserId(), l.getLeagueId(), Calendar.getInstance().getTime());
-			p.saveWinLoss(m);
+			Match m = new Match("0", u2.getUserId(), u3.getUserId(), l.getLeagueId(), Calendar.getInstance().getTime());
+			p.saveMatch(m);
 			
-			ArrayList<User> users = p.findUsersByLeague(l);
+/*			ArrayList<User> users = p.findUsersByLeague(l);
 			
 			for(User u : users) {
 				System.out.println(u.getFirstName());
 			}
+*/			
+/*			ArrayList<Match> mat = p.findMatchesByLeague(l);
 			
-			ArrayList<Matches> mat = p.findMatchesByLeague(l);
-			
-			for(Matches mt : mat) {
+			for(Match mt : mat) {
 				System.out.println(mt.getUserIdLoser());
 				System.out.println(mt.getUserIdWinner());
 			}*/
 
-		
+			Match ma = p.findMatchById("0");
+			System.out.println((ma != null) ? ma.getLeagueId() : "null");
+			
 	}
 
 }
