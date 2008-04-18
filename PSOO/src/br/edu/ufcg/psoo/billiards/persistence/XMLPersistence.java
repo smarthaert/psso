@@ -24,7 +24,7 @@ public class XMLPersistence implements PersistenceIF {
 	private String xmlPathLeagues;
 	private String xmlPathUserLeague;
 	private String xmlPathMatches;
-	
+
 	public XMLPersistence() {
 		this.stream = new XStream();
 	}
@@ -72,9 +72,9 @@ public class XMLPersistence implements PersistenceIF {
 	}
 
 	public void setDatabase(String databaseName) {
-		this.xmlPathUsers      = databaseName + "-users.xml";
-		this.xmlPathLeagues    = databaseName + "-leagues.xml";
-		this.xmlPathMatches    = databaseName + "-matches.xml";
+		this.xmlPathUsers = databaseName + "-users.xml";
+		this.xmlPathLeagues = databaseName + "-leagues.xml";
+		this.xmlPathMatches = databaseName + "-matches.xml";
 		this.xmlPathUserLeague = databaseName + "-usersLeague.xml";
 	}
 
@@ -129,7 +129,7 @@ public class XMLPersistence implements PersistenceIF {
 				usersFound.add(user);
 			}
 		}
-		
+
 		return usersFound;
 	}
 
@@ -186,11 +186,13 @@ public class XMLPersistence implements PersistenceIF {
 		this.deleteAllObjects(this.xmlPathMatches);
 	}
 
-	public void putPlayerIntoLeague(League league, User user, Integer initialHandCap) {
+	public void putPlayerIntoLeague(League league, User user,
+			Integer initialHandCap) {
 		ArrayList<UserLeague> usersAndLeagues = this
 				.getContents(this.xmlPathUserLeague);
 		UserLeague userleague = new UserLeague(user.getUserId(), league
-				.getLeagueId(), initialHandCap, Calendar.getInstance().getTime());
+				.getLeagueId(), initialHandCap, Calendar.getInstance()
+				.getTime());
 
 		if (usersAndLeagues.contains(userleague))
 			usersAndLeagues.remove(userleague);
@@ -199,82 +201,83 @@ public class XMLPersistence implements PersistenceIF {
 		this.createContents(this.xmlPathUserLeague, this.stream
 				.toXML(usersAndLeagues));
 	}
-	
+
 	public void saveUserLeague(UserLeague userLeague) {
 		this.saveObject(userLeague, this.xmlPathUserLeague);
 	}
-	
+
 	public UserLeague getUserLeague(User user, League league) {
-		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);
-		
-		for(UserLeague ul : userLeagueList) {
-			if(ul.getUserId().equals(user.getUserId()) && ul.getLeagueId().equals(league.getLeagueId())) {
+		ArrayList<UserLeague> userLeagueList = this
+				.getContents(this.xmlPathUserLeague);
+
+		for (UserLeague ul : userLeagueList) {
+			if (ul.getUserId().equals(user.getUserId())
+					&& ul.getLeagueId().equals(league.getLeagueId())) {
 				return ul;
 			}
 		}
-		
+
 		return null;
-		
+
 	}
-	
+
 	public League findLeagueById(String id) {
 		ArrayList<League> leagues = this.getLeagues();
-		
-		for(League l : leagues) {
-			if(l.getLeagueId().equals(id))
+
+		for (League l : leagues) {
+			if (l.getLeagueId().equals(id))
 				return l;
 		}
-		
+
 		return null;
-		
+
 	}
-	
+
 	public ArrayList<League> findLeagueByName(String match) {
 		ArrayList<League> leagues = this.getLeagues();
-        ArrayList<League> foundLeagues = new ArrayList<League>();
-        String s2 = match.toLowerCase();
-        for (League l : leagues) {
-                String s1 = l.getName().toLowerCase();
+		ArrayList<League> foundLeagues = new ArrayList<League>();
+		String s2 = match.toLowerCase();
+		for (League l : leagues) {
+			String s1 = l.getName().toLowerCase();
 
-                if (s1.equals(s2) || s1.matches(s2)) {
-                        foundLeagues.add(l);
-                }
-        }
-        
-        return foundLeagues;
-		
+			if (s1.equals(s2) || s1.matches(s2)) {
+				foundLeagues.add(l);
+			}
+		}
+
+		return foundLeagues;
+
 	}
 
 	public void removeLeague(League league) {
 		ArrayList<League> leagues = this.getLeagues();
-		
+
 		leagues.remove(league);
-		
+
 		this.deletePlayerAndLeague(league);
 		this.createContents(this.xmlPathLeagues, this.stream.toXML(leagues));
-		
+
 	}
 
 	private void deletePlayerAndLeague(League l) {
 		ArrayList<UserLeague> userLeaguesList = this.getAllPlayersInALeague();
-		
+
 		UserLeague userLeague = null;
-		
-		for(int i=0; i<userLeaguesList.size(); i++) {
+
+		for (int i = 0; i < userLeaguesList.size(); i++) {
 			userLeague = userLeaguesList.get(i);
-			if(userLeague.getLeagueId().equals(l.getLeagueId())) {
+			if (userLeague.getLeagueId().equals(l.getLeagueId())) {
 				userLeaguesList.remove(i);
 			}
 		}
-		
-		this.createContents(this.xmlPathUserLeague, this.stream.toXML(userLeaguesList));
+
+		this.createContents(this.xmlPathUserLeague, this.stream
+				.toXML(userLeaguesList));
 	}
-	
+
 	private ArrayList<UserLeague> getAllPlayersInALeague() {
 		return this.getContents(this.xmlPathUserLeague);
 	}
-	
-
 
 	public ArrayList<Match> getAllMatches() {
 		return this.getContents(this.xmlPathMatches);
@@ -282,10 +285,12 @@ public class XMLPersistence implements PersistenceIF {
 
 	public void removeMatch(Match winLoss) {
 		ArrayList<Match> winLossList = this.getAllMatches();
-		
+
 		winLossList.remove(winLoss);
-		
-		this.createContents(this.xmlPathMatches, this.stream.toXML(winLossList));		
+
+		this
+				.createContents(this.xmlPathMatches, this.stream
+						.toXML(winLossList));
 	}
 
 	public void saveMatch(Match winLoss) {
@@ -293,86 +298,108 @@ public class XMLPersistence implements PersistenceIF {
 	}
 
 	public ArrayList<League> findLeaguesByUser(User user) {
-		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);				
-		ArrayList<League> leaguesFound 			 = new ArrayList<League>();
-		
-		for(UserLeague ul : userLeagueList) {
-			if(ul.getUserId().equals(user.getUserId())) {
-				leaguesFound.add(this.findLeagueById(ul.getLeagueId()));							
+		ArrayList<UserLeague> userLeagueList = this
+				.getContents(this.xmlPathUserLeague);
+		ArrayList<League> leaguesFound = new ArrayList<League>();
+
+		for (UserLeague ul : userLeagueList) {
+			if (ul.getUserId().equals(user.getUserId())) {
+				leaguesFound.add(this.findLeagueById(ul.getLeagueId()));
 			}
 		}
-		
+
 		return leaguesFound;
 	}
 
-
 	public ArrayList<User> findUsersByLeague(League league) {
-		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);				
-		ArrayList<User> usersFound 			 = new ArrayList<User>();
-				
+		ArrayList<UserLeague> userLeagueList = this
+				.getContents(this.xmlPathUserLeague);
+		ArrayList<User> usersFound = new ArrayList<User>();
+
 		usersFound.add(this.findUserById(league.getOperator()));
-		
-		for(UserLeague ul : userLeagueList) {
-			if(ul.getLeagueId().equals(league.getLeagueId())) {
-				usersFound.add(this.findUserById(ul.getUserId()));							
+
+		for (UserLeague ul : userLeagueList) {
+			if (ul.getLeagueId().equals(league.getLeagueId())) {
+				usersFound.add(this.findUserById(ul.getUserId()));
 			}
 		}
-		
+
 		return usersFound;
 	}
 
 	public void leaveLeague(User user, League league) {
-		ArrayList<UserLeague> userLeagueList = this.getContents(this.xmlPathUserLeague);		
+		ArrayList<UserLeague> userLeagueList = this
+				.getContents(this.xmlPathUserLeague);
 
-		for(int i=0; i<userLeagueList.size(); i++) {
-			if(userLeagueList.get(i).getUserId().equals(user.getUserId()) && (userLeagueList.get(i).getLeagueId().equals(league.getLeagueId()))) {
+		for (int i = 0; i < userLeagueList.size(); i++) {
+			if (userLeagueList.get(i).getUserId().equals(user.getUserId())
+					&& (userLeagueList.get(i).getLeagueId().equals(league
+							.getLeagueId()))) {
 				userLeagueList.remove(i);
 			}
 		}
-		
-		this.createContents(this.xmlPathUserLeague, this.stream.toXML(userLeagueList));
-		
+
+		this.createContents(this.xmlPathUserLeague, this.stream
+				.toXML(userLeagueList));
+
 	}
 
-
 	public ArrayList<Match> findMatchesByLeague(League league) {
-		ArrayList<Match> matches 		= this.getContents(this.xmlPathMatches);
+		ArrayList<Match> matches = this.getContents(this.xmlPathMatches);
 		ArrayList<Match> matchesFound = new ArrayList<Match>();
-		
-		for(Match m : matches) {
-			if(m.getLeagueId().equals(league.getLeagueId())) {
+
+		for (Match m : matches) {
+			if (m.getLeagueId().equals(league.getLeagueId())) {
 				matchesFound.add(m);
 			}
 		}
-			
+
 		return matchesFound;
 	}
-	
+
 	public Match findMatchById(String matchId) {
 		ArrayList<Match> matchList = this.getContents(this.xmlPathMatches);
-		
-		for(Match m : matchList) {
-			if(m.getMatchId().equals(matchId))
+
+		for (Match m : matchList) {
+			if (m.getMatchId().equals(matchId))
 				return m;
 		}
-		
+
 		return null;
 	}
-	
-	public ArrayList<Match> findMatchesByDate(League league, Date initDate, Date finalDate) {
-		ArrayList<Match> matchList 	  = this.findMatchesByLeague(league);
+
+	public ArrayList<Match> findMatchesByDate(League league, Date initDate,
+			Date finalDate) {
+		ArrayList<Match> matchList = this.findMatchesByLeague(league);
 		ArrayList<Match> matchesFound = new ArrayList<Match>();
-		
-		
+
 		for (Match match : matchList) {
 			Date date = match.getCreationDate();
-			if( (date.compareTo(initDate) >= 0) && (date.compareTo(finalDate) <= 0) ) {
+			if ((date.compareTo(initDate) >= 0)
+					&& (date.compareTo(finalDate) <= 0)) {
 				matchesFound.add(match);
 			}
 		}
-		
+
 		return matchesFound;
-		
+
 	}
-	
+
+	public ArrayList<Match> findMatchesByDate(User user, League league,
+			Date initDate, Date finalDate) {
+		ArrayList<Match> matchList = this.findMatchesByDate(league, initDate,
+				finalDate);
+		ArrayList<Match> matchesFound = new ArrayList<Match>();
+
+		for (Match match : matchList) {
+			if (match.getUserIdWinner().equals(user.getUserId())
+					|| match.getUserIdLoser().equals(user.getUserId())) {
+				matchesFound.add(match);
+			}
+		}
+
+		return matchesFound;
+
+	}
+
 }

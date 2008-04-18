@@ -71,4 +71,6 @@ public interface PersistenceIF {
 
 	public ArrayList<Match> findMatchesByDate(League league, Date initDate, Date finalDate);
 	
+	public ArrayList<Match> findMatchesByDate(User user, League league, Date initDate, Date finalDate); 
+	
 }
