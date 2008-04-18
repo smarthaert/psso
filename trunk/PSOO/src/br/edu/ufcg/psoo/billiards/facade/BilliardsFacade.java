@@ -724,7 +724,33 @@ public class BilliardsFacade {
 		ArrayList<Match> list = persistence.findMatchesByLeague(league);
 		return list.get(index - 1).getMatchId();
 	}
+	
+	public String getMatch(String userId, String leagueId, Integer index) {
+		League league = persistence.findLeagueById(leagueId);
+		
+		ArrayList<Match> list = persistence.findMatchesByLeague(league);
+		ArrayList<Match> list2 = new ArrayList<Match>();
+		for (Match match : list) {
+			if (match.getUserIdLoser().equals(userId)||match.getUserIdWinner().equals(userId)) {
+				list2.add(match);
+			}
+		}
+		
+		Collections.sort(list2, new Comparator<Match>(){
 
+			public int compare(Match o1, Match o2) {
+				return o1.getCreationDate().compareTo(o2.getCreationDate());
+			}
+			
+		});
+		return list2.get(index - 1).getMatchId();
+	}
+
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 */
 	public String getMatchDate(String matchId) {
 		Match match = persistence.findMatchById(matchId);
 		StringBuilder ret = new StringBuilder(dateFomat.format(match
@@ -840,6 +866,7 @@ public class BilliardsFacade {
 		Match match = persistence.findMatchById(matchId);
 		persistence.removeMatch(match);
 	}
+	
 	
 	
 
