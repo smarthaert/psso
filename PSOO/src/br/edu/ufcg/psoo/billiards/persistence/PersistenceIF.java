@@ -1,6 +1,7 @@
 package br.edu.ufcg.psoo.billiards.persistence;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.User;
@@ -68,4 +69,6 @@ public interface PersistenceIF {
 	
 	public Match findMatchById(String matchId);
 
+	public ArrayList<Match> findMatchesByDate(League league, Date initDate, Date finalDate);
+	
 }

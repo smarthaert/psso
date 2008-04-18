@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.User;
@@ -356,6 +357,26 @@ public class XMLPersistence implements PersistenceIF {
 		}
 		
 		return null;
+	}
+	
+	public ArrayList<Match> findMatchesByDate(League league, Date initDate, Date finalDate) {
+		ArrayList<Match> matchList = this.getContents(this.xmlPathMatches);
+		ArrayList<Match> matchesFound = new ArrayList<Match>();
+		
+		String leagueId = league.getLeagueId();
+		for (Match match : matchList) {
+			
+			if(match.getLeagueId().equals(leagueId)) {
+				Date date = match.getCreationDate();
+				if( (date.compareTo(initDate) >= 0) && (date.compareTo(finalDate) <= 0) ) {
+					matchesFound.add(match);
+				}
+			}
+			
+		}
+		
+		return matchesFound;
+		
 	}
 	
 }
