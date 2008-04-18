@@ -16,12 +16,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import br.edu.ufcg.psoo.billiards.beans.League;
 import br.edu.ufcg.psoo.billiards.beans.Match;
 import br.edu.ufcg.psoo.billiards.beans.User;
 import br.edu.ufcg.psoo.billiards.beans.UserLeague;
 import br.edu.ufcg.psoo.billiards.persistence.PersistenceIF;
 import br.edu.ufcg.psoo.billiards.persistence.XMLPersistence;
+import br.edu.ufcg.psoo.billiards.util.BilliardsUtil;
 
 /**
  * @author ivocalado
@@ -35,11 +38,14 @@ public class BilliardsFacade {
 	private PersistenceIF persistence;
 
 	private SimpleDateFormat dateFomat;
+	
+	private BilliardsUtil billiardsUtil;
 
 	public BilliardsFacade() {
 		random = new Random();
 		persistence = new XMLPersistence();
 		dateFomat = new SimpleDateFormat("dd/MM/yyyy");
+		billiardsUtil = new BilliardsUtil();
 	}
 
 	/**
@@ -150,7 +156,7 @@ public class BilliardsFacade {
 		}
 
 		try { // invokes the correct method to changing
-			setField(User.class, attribute, user, value);
+			billiardsUtil.setField(User.class, attribute, user, value);
 		} catch (NoSuchFieldException e) {
 			if (attribute == null || attribute.equals("")) {
 				Exception ex = new Exception(
@@ -209,7 +215,7 @@ public class BilliardsFacade {
 			throw new Exception("There aren't user with id " + id);
 		}
 		try {
-			Object ret = getField(User.class, attribute, user);
+			Object ret = billiardsUtil.getField(User.class, attribute, user);
 			return ret;
 		} catch (Exception e) {
 			Exception ex = new Exception("Unknown user attribute");
@@ -315,7 +321,7 @@ public class BilliardsFacade {
 			throw new Exception("There aren't league with id " + idLeague);
 		}
 		try {
-			Object ret = getField(League.class, attribute, league);
+			Object ret = billiardsUtil.getField(League.class, attribute, league);
 			if (attribute.equals("creationDate") && ret != null) {
 				Date date = (Date) ret;
 				ret = new StringBuilder(dateFomat.format(date)).toString();
@@ -366,7 +372,7 @@ public class BilliardsFacade {
 		}
 
 		try { // invokes the correct method to changing
-			setField(League.class, attribute, league, value);
+			billiardsUtil.setField(League.class, attribute, league, value);
 		} catch (NoSuchFieldException e) {
 			if (attribute == null || attribute.equals("")) {
 				Exception ex = new Exception(
@@ -541,7 +547,7 @@ public class BilliardsFacade {
 			throw new Exception("User is not a league member");
 		}
 		try {
-			Object ret = getField(UserLeague.class, attribute, uleague);
+			Object ret = billiardsUtil.getField(UserLeague.class, attribute, uleague);
 			if (attribute.equals("joinDate") && ret != null) {
 				Date date = (Date) ret;
 				ret = new StringBuilder(dateFomat.format(date)).toString();
@@ -657,11 +663,16 @@ public class BilliardsFacade {
 	 */
 	public Integer getNumberOfMatches(String userId, String leagueId)
 			throws Exception {
+
 		ArrayList<Match> list = getMatches(leagueId);
+		User user = persistence.findUserById(userId);
+		if (user == null) {
+			throw new Exception("Unknown user");
+		}
 		int i = 0;
 		for (Match matches : list) {
-			if (matches.getUserIdLoser().equals(userId)
-					|| matches.getUserIdWinner().equals(userId)) {
+			if (matches.getUserIdLoser().equals(user.getUserId())
+					|| matches.getUserIdWinner().equals(user.getUserId())) {
 				i++;
 			}
 		}
@@ -700,17 +711,25 @@ public class BilliardsFacade {
 			String loserId, Integer lenght, Integer score,
 			Integer longestRunForWinner, Integer longestRunForLoser)
 			throws Exception {
-		String id = String.valueOf(random.nextLong());
-		Date date2;
+		
+		League league = persistence.findLeagueById(leagueId);
+		if (league==null) {
+			throw new Exception("Unknown league");
+		}		
+		Date date2=null;
 		try {
 			date2 = dateFomat.parse(date);
-			Match match = new Match(id, winnerId, loserId, leagueId, lenght,
-					score, longestRunForWinner, longestRunForLoser, date2);
-			persistence.saveMatch(match);
-			return id;
+			/*if (!billiardsUtil.validateDate(date, dateFomat, date2)) {
+				throw new Exception("Invalid date");
+			}*/ //TODO Descobrir como resolver esses problemas de data invalida
 		} catch (ParseException e) {
 			throw new Exception("Invalid date");
 		}
+		String id = String.valueOf(random.nextLong());
+		Match match = new Match(id, winnerId, loserId, leagueId, lenght,
+				score, longestRunForWinner, longestRunForLoser, date2);
+		persistence.saveMatch(match);
+		return id;
 	}
 
 	/**
@@ -724,24 +743,25 @@ public class BilliardsFacade {
 		ArrayList<Match> list = persistence.findMatchesByLeague(league);
 		return list.get(index - 1).getMatchId();
 	}
-	
+
 	public String getMatch(String userId, String leagueId, Integer index) {
 		League league = persistence.findLeagueById(leagueId);
-		
+
 		ArrayList<Match> list = persistence.findMatchesByLeague(league);
 		ArrayList<Match> list2 = new ArrayList<Match>();
 		for (Match match : list) {
-			if (match.getUserIdLoser().equals(userId)||match.getUserIdWinner().equals(userId)) {
+			if (match.getUserIdLoser().equals(userId)
+					|| match.getUserIdWinner().equals(userId)) {
 				list2.add(match);
 			}
 		}
-		
-		Collections.sort(list2, new Comparator<Match>(){
+
+		Collections.sort(list2, new Comparator<Match>() {
 
 			public int compare(Match o1, Match o2) {
 				return o1.getCreationDate().compareTo(o2.getCreationDate());
 			}
-			
+
 		});
 		return list2.get(index - 1).getMatchId();
 	}
@@ -866,59 +886,65 @@ public class BilliardsFacade {
 		Match match = persistence.findMatchById(matchId);
 		persistence.removeMatch(match);
 	}
-	
-	
-	
 
-	/***************************************************************************
-	 * Shared methods ******************
+	/**
 	 * 
-	 * 
-	 * /**
-	 * 
-	 * @param a
+	 * @param leagueId
+	 * @param startDate
+	 * @param endDate
+	 * @param index
 	 * @return
+	 * @throws Exception
 	 */
-	private static String upper(String a) {
-		return a.substring(0, 1).toUpperCase() + a.substring(1);
+	public String getMatchByDate(String leagueId, String startDate,
+			String endDate, Integer index) throws Exception {
+		try {
+			Date sDate = dateFomat.parse(startDate);
+			Date eDate = dateFomat.parse(endDate);
+			League league = persistence.findLeagueById(leagueId);
+			ArrayList<Match> list = persistence.findMatchesByDate(league,
+					sDate, eDate);
+			Collections.sort(list, new Comparator<Match>() {
+				public int compare(Match o1, Match o2) {
+					return o1.getCreationDate().compareTo(o2.getCreationDate());
+				}
+			});
+
+			return list.get(index - 1).getMatchId();
+		} catch (ParseException e) {
+			throw new Exception("Invalid date");
+		}
 	}
 
 	/**
 	 * 
-	 * @param clz
-	 * @param attribute
-	 * @param ob
+	 * @param userId
+	 * @param leagueId
+	 * @param startDate
+	 * @param endDate
+	 * @param index
 	 * @return
 	 * @throws Exception
 	 */
-	private Object getField(Class clz, String attribute, Object ob)
-			throws Exception {
-		Field field = clz.getDeclaredField(attribute);
-		if (field.getModifiers() == Field.PUBLIC + Field.DECLARED) {
-			return field.get(ob);
-		}
-		String methodName = "get" + upper(field.getName());
-		Method method = ob.getClass().getMethod(methodName);
-		return method.invoke(ob);
-	}
+	public String getMatchByDate(String userId, String leagueId,
+			String startDate, String endDate, Integer index) throws Exception {
+		try {
+			Date sDate = dateFomat.parse(startDate);
+			Date eDate = dateFomat.parse(endDate);
+			League league = persistence.findLeagueById(leagueId);
+			User user = persistence.findUserById(userId);
+			ArrayList<Match> list = persistence.findMatchesByDate(user, league,
+					sDate, eDate);
+			Collections.sort(list, new Comparator<Match>() {
+				public int compare(Match o1, Match o2) {
+					return o1.getCreationDate().compareTo(o2.getCreationDate());
+				}
+			});
 
-	/**
-	 * 
-	 * @param clz
-	 * @param attribute
-	 * @param ob
-	 * @param args
-	 * @throws Exception
-	 */
-	private void setField(Class clz, String attribute, Object ob, Object args)
-			throws Exception {
-		Field field = clz.getDeclaredField(attribute);
-		if (field.getModifiers() == Field.PUBLIC + Field.DECLARED) {
-			field.set(ob, args);
-			return;
+			return list.get(index - 1).getMatchId();
+		} catch (ParseException e) {
+			throw new Exception("Invalid date");
 		}
-		String methodName = "set" + upper(field.getName());
-		ob.getClass().getMethod(methodName, args.getClass()).invoke(ob, args);
-	}
 
+	}
 }
