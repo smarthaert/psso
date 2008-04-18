@@ -360,19 +360,15 @@ public class XMLPersistence implements PersistenceIF {
 	}
 	
 	public ArrayList<Match> findMatchesByDate(League league, Date initDate, Date finalDate) {
-		ArrayList<Match> matchList = this.getContents(this.xmlPathMatches);
+		ArrayList<Match> matchList 	  = this.findMatchesByLeague(league);
 		ArrayList<Match> matchesFound = new ArrayList<Match>();
 		
-		String leagueId = league.getLeagueId();
+		
 		for (Match match : matchList) {
-			
-			if(match.getLeagueId().equals(leagueId)) {
-				Date date = match.getCreationDate();
-				if( (date.compareTo(initDate) >= 0) && (date.compareTo(finalDate) <= 0) ) {
-					matchesFound.add(match);
-				}
+			Date date = match.getCreationDate();
+			if( (date.compareTo(initDate) >= 0) && (date.compareTo(finalDate) <= 0) ) {
+				matchesFound.add(match);
 			}
-			
 		}
 		
 		return matchesFound;
