@@ -791,10 +791,6 @@ public class BilliardsFacade {
 		Date date2 = null;
 		try {
 			date2 = dateFormat.parse(date);
-			/*
-			 * if (!billiardsUtil.validateDate(date, dateFomat, date2)) { throw
-			 * new Exception("Invalid date"); }
-			 */// TODO Descobrir como resolver esses problemas de data invalida
 		} catch (Exception e) {
 			throw new Exception("Invalid date");
 		}
