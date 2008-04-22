@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.jws.soap.SOAPBinding.Use;
+
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
@@ -37,14 +39,15 @@ public class BilliardsFacade {
 
 	private PersistenceIF persistence;
 
-	private SimpleDateFormat dateFomat;
-	
+	private SimpleDateFormat dateFormat;
+
 	private BilliardsUtil billiardsUtil;
 
 	public BilliardsFacade() {
 		random = new Random();
 		persistence = new XMLPersistence();
-		dateFomat = new SimpleDateFormat("dd/MM/yyyy");
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		dateFormat.setLenient(false);
 		billiardsUtil = new BilliardsUtil();
 	}
 
@@ -321,10 +324,11 @@ public class BilliardsFacade {
 			throw new Exception("There aren't league with id " + idLeague);
 		}
 		try {
-			Object ret = billiardsUtil.getField(League.class, attribute, league);
+			Object ret = billiardsUtil
+					.getField(League.class, attribute, league);
 			if (attribute.equals("creationDate") && ret != null) {
 				Date date = (Date) ret;
-				ret = new StringBuilder(dateFomat.format(date)).toString();
+				ret = new StringBuilder(dateFormat.format(date)).toString();
 
 			}
 			return ret;
@@ -341,7 +345,7 @@ public class BilliardsFacade {
 	 * @return
 	 */
 	public String todaysDate() {
-		return new StringBuilder(dateFomat.format(Calendar.getInstance()
+		return new StringBuilder(dateFormat.format(Calendar.getInstance()
 				.getTime())).toString();
 	}
 
@@ -476,10 +480,20 @@ public class BilliardsFacade {
 	/**
 	 * 
 	 * @param format
+	 * @throws Exception
 	 */
-	public void dateFormat(String format) {
+	public void dateFormat(String format) throws Exception {
+		if (format == null || format.equals("")) {
+			throw new Exception("Unknown date format");
+		}
 		format = format.replace("mm", "MM");
-		dateFomat = new SimpleDateFormat(format);
+		try {
+			dateFormat = new SimpleDateFormat(format);
+			dateFormat.setLenient(false);
+		} catch (IllegalArgumentException e) {
+			throw new Exception("Unknown date format");
+		}
+
 	}
 
 	/**
@@ -547,10 +561,11 @@ public class BilliardsFacade {
 			throw new Exception("User is not a league member");
 		}
 		try {
-			Object ret = billiardsUtil.getField(UserLeague.class, attribute, uleague);
+			Object ret = billiardsUtil.getField(UserLeague.class, attribute,
+					uleague);
 			if (attribute.equals("joinDate") && ret != null) {
 				Date date = (Date) ret;
-				ret = new StringBuilder(dateFomat.format(date)).toString();
+				ret = new StringBuilder(dateFormat.format(date)).toString();
 
 			}
 			return ret;
@@ -625,10 +640,20 @@ public class BilliardsFacade {
 	 */
 	public Integer getNumberOfWins(String userId, String leagueId)
 			throws Exception {
-		ArrayList<Match> list = getMatches(leagueId);
+
+		ArrayList<Match> list = getMatches(leagueId); // It can thrown
+		// 'Unknown league'
+		// error
+
+		User user = persistence.findUserById(userId);
+
+		if (user == null) {
+			throw new Exception("Unknown user");
+		}
+
 		int i = 0;
 		for (Match matches : list) {
-			if (matches.getUserIdWinner().equals(userId)) {
+			if (matches.getUserIdWinner().equals(user.getUserId())) {
 				i++;
 			}
 		}
@@ -644,10 +669,18 @@ public class BilliardsFacade {
 	 */
 	public Integer getNumberOfLosses(String userId, String leagueId)
 			throws Exception {
-		ArrayList<Match> list = getMatches(leagueId);
+		ArrayList<Match> list = getMatches(leagueId); // It can thrown
+		// 'Unknown league'
+		// error
+
+		User user = persistence.findUserById(userId);
+		if (user == null) {
+			throw new Exception("Unknown user");
+		}
+
 		int i = 0;
 		for (Match matches : list) {
-			if (matches.getUserIdLoser().equals(userId)) {
+			if (matches.getUserIdLoser().equals(user.getUserId())) {
 				i++;
 			}
 		}
@@ -708,26 +741,73 @@ public class BilliardsFacade {
 	 * @throws Exception
 	 */
 	public String addMatchResult(String leagueId, String date, String winnerId,
-			String loserId, Integer lenght, Integer score,
-			Integer longestRunForWinner, Integer longestRunForLoser)
+			String loserId, String lenght, String score,
+			String longestRunForWinner, String longestRunForLoser)
 			throws Exception {
-		
+
 		League league = persistence.findLeagueById(leagueId);
-		if (league==null) {
+		if (league == null) {
 			throw new Exception("Unknown league");
-		}		
-		Date date2=null;
+		}
+		User winner = persistence.findUserById(winnerId);
+		User loser = persistence.findUserById(loserId);
+		if (winner == null || loser == null) {
+			throw new Exception("Unknown user");
+		}
+
+		if (winner.equals(loser)) {
+			throw new Exception("Users must be different");
+		}
+
+		Integer l = null;
+		Integer sc = null;
+		Integer lrWinner = null;
+		Integer lrLoser = null;
+
+		if (!(lenght == null && score == null && longestRunForLoser == null && longestRunForWinner == null)) {
+			try {
+				l = Integer.parseInt(lenght);
+				if (l <= 0) {
+					throw new Exception("Invalid match length");
+				}
+			} catch (NumberFormatException e) {
+				throw new Exception("Invalid match length");
+			}
+
+			try {
+				sc = Integer.parseInt(score);
+				if (sc < 0 || sc >= l) {
+					throw new Exception("Invalid score");
+				}
+			} catch (NumberFormatException e) {
+				throw new Exception("Invalid score");
+			}
+
+			try {
+				lrWinner = Integer.parseInt(longestRunForWinner);
+				lrLoser = Integer.parseInt(longestRunForLoser);
+				if (lrWinner < 1 || lrWinner > l || lrLoser < 0 || lrLoser > sc) {
+					throw new Exception("Invalid run");
+				}
+			} catch (NumberFormatException e) {
+				throw new Exception("Invalid run");
+			}
+
+		}
+
+		Date date2 = null;
 		try {
-			date2 = dateFomat.parse(date);
-			/*if (!billiardsUtil.validateDate(date, dateFomat, date2)) {
-				throw new Exception("Invalid date");
-			}*/ //TODO Descobrir como resolver esses problemas de data invalida
-		} catch (ParseException e) {
+			date2 = dateFormat.parse(date);
+			/*
+			 * if (!billiardsUtil.validateDate(date, dateFomat, date2)) { throw
+			 * new Exception("Invalid date"); }
+			 */// TODO Descobrir como resolver esses problemas de data invalida
+		} catch (Exception e) {
 			throw new Exception("Invalid date");
 		}
 		String id = String.valueOf(random.nextLong());
-		Match match = new Match(id, winnerId, loserId, leagueId, lenght,
-				score, longestRunForWinner, longestRunForLoser, date2);
+		Match match = new Match(id, winnerId, loserId, leagueId, l, sc,
+				lrWinner, lrLoser, date2);
 		persistence.saveMatch(match);
 		return id;
 	}
@@ -737,15 +817,35 @@ public class BilliardsFacade {
 	 * @param leagueId
 	 * @param index
 	 * @return
+	 * @throws Exception
 	 */
-	public String getMatch(String leagueId, Integer index) {
+	public String getMatch(String leagueId, Integer index) throws Exception {
 		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
+			throw new Exception("Unknown league");
+		}
+
 		ArrayList<Match> list = persistence.findMatchesByLeague(league);
-		return list.get(index - 1).getMatchId();
+
+		try {
+			return list.get(index - 1).getMatchId();
+		} catch (Exception e) {
+			throw new Exception("Invalid index");
+		}
+
 	}
 
-	public String getMatch(String userId, String leagueId, Integer index) {
+	public String getMatch(String userId, String leagueId, Integer index)
+			throws Exception {
 		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
+			throw new Exception("Unknown league");
+		}
+
+		User user = persistence.findUserById(userId);
+		if (user == null) {
+			throw new Exception("Unknown user");
+		}
 
 		ArrayList<Match> list = persistence.findMatchesByLeague(league);
 		ArrayList<Match> list2 = new ArrayList<Match>();
@@ -763,7 +863,12 @@ public class BilliardsFacade {
 			}
 
 		});
-		return list2.get(index - 1).getMatchId();
+
+		try {
+			return list2.get(index - 1).getMatchId();
+		} catch (Exception e) {
+			throw new Exception("Invalid index");
+		}
 	}
 
 	/**
@@ -773,7 +878,7 @@ public class BilliardsFacade {
 	 */
 	public String getMatchDate(String matchId) {
 		Match match = persistence.findMatchById(matchId);
-		StringBuilder ret = new StringBuilder(dateFomat.format(match
+		StringBuilder ret = new StringBuilder(dateFormat.format(match
 				.getCreationDate()));
 		return ret.toString();
 	}
@@ -782,9 +887,13 @@ public class BilliardsFacade {
 	 * 
 	 * @param matchId
 	 * @return
+	 * @throws Exception
 	 */
-	public String getMatchWinner(String matchId) {
+	public String getMatchWinner(String matchId) throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
 		return match.getUserIdWinner();
 	}
 
@@ -792,9 +901,13 @@ public class BilliardsFacade {
 	 * 
 	 * @param matchId
 	 * @return
+	 * @throws Exception
 	 */
-	public String getMatchLoser(String matchId) {
+	public String getMatchLoser(String matchId) throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
 		return match.getUserIdLoser();
 	}
 
@@ -802,9 +915,13 @@ public class BilliardsFacade {
 	 * 
 	 * @param matchId
 	 * @return
+	 * @throws Exception
 	 */
-	public String getMatchLength(String matchId) {
+	public String getMatchLength(String matchId) throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
 		Integer integer = match.getLength();
 		return (integer == null) ? "" : String.valueOf(integer);
 	}
@@ -813,9 +930,13 @@ public class BilliardsFacade {
 	 * 
 	 * @param matchId
 	 * @return
+	 * @throws Exception
 	 */
-	public String getMatchScore(String matchId) {
+	public String getMatchScore(String matchId) throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
 		Integer ret = match.getScore();
 		return (ret == null) ? "" : String.valueOf(ret);
 	}
@@ -824,9 +945,13 @@ public class BilliardsFacade {
 	 * 
 	 * @param matchId
 	 * @return
+	 * @throws Exception
 	 */
-	public String getMatchLongestRunForWinner(String matchId) {
+	public String getMatchLongestRunForWinner(String matchId) throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
 		Integer ret = match.getLongestRunForWinner();
 		return (ret == null) ? "" : String.valueOf(ret);
 	}
@@ -835,9 +960,13 @@ public class BilliardsFacade {
 	 * 
 	 * @param matchId
 	 * @return
+	 * @throws Exception
 	 */
-	public String getMatchLongestRunForLoser(String matchId) {
+	public String getMatchLongestRunForLoser(String matchId) throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
 		Integer ret = match.getLongestRunForLoser();
 		return (ret == null) ? "" : String.valueOf(ret);
 	}
@@ -855,35 +984,89 @@ public class BilliardsFacade {
 	 * @throws Exception
 	 */
 	public void updateMatchResult(String matchId, String date, String winnerId,
-			String loserId, Integer length, Integer score,
-			Integer longestRunForWinner, Integer longestRunForLoser)
+			String loserId, String lenght, String score,
+			String longestRunForWinner, String longestRunForLoser)
 			throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
+
+		Date date2 = null;
 		try {
-			Date date2 = dateFomat.parse(date);
-			match.setCreationDate(date2);
-			match.setUserIdWinner(winnerId);
-			match.setUserIdLoser(loserId);
-			match.setLength(length);
-			match.setScore(score);
-			match.setLongestRunForWinner(longestRunForWinner);
-			match.setLongestRunForLoser(longestRunForLoser);
-
-			persistence.saveMatch(match);
-
-		} catch (ParseException e) {
+			date2 = dateFormat.parse(date);
+		} catch (Exception e) {
 			Exception ex = new Exception("Invalid date");
 			ex.setStackTrace(e.getStackTrace());
 			throw ex;
 		}
+		User winner = persistence.findUserById(winnerId);
+		User loser = persistence.findUserById(loserId);
+		if (winner == null || loser == null) {
+			throw new Exception("Unknown user");
+		}
+		if (winner.equals(loser)) {
+			throw new Exception("Users must be different");
+		}
+
+
+		Integer l = null;
+		Integer sc = null;
+		Integer lrWinner = null;
+		Integer lrLoser = null;
+
+		if (!(lenght == null && score == null && longestRunForLoser == null && longestRunForWinner == null)) {
+			try {
+				l = Integer.parseInt(lenght);
+				if (l <= 0) {
+					throw new Exception("Invalid match length");
+				}
+			} catch (NumberFormatException e) {
+				throw new Exception("Invalid match length");
+			}
+
+			try {
+				sc = Integer.parseInt(score);
+				if (sc < 0 || sc >= l) {
+					throw new Exception("Invalid score");
+				}
+			} catch (NumberFormatException e) {
+				throw new Exception("Invalid score");
+			}
+
+			try {
+				lrWinner = Integer.parseInt(longestRunForWinner);
+				lrLoser = Integer.parseInt(longestRunForLoser);
+				if (lrWinner < 1 || lrWinner > l || lrLoser < 0 || lrLoser > sc) {
+					throw new Exception("Invalid run");
+				}
+			} catch (NumberFormatException e) {
+				throw new Exception("Invalid run");
+			}
+
+		}
+		match.setCreationDate(date2);
+		match.setUserIdWinner(winnerId);
+		match.setUserIdLoser(loserId);
+		match.setLength(l);
+		match.setScore(sc);
+		match.setLongestRunForWinner(lrWinner);
+		match.setLongestRunForLoser(lrLoser);
+
+		persistence.saveMatch(match);
+
 	}
 
 	/**
 	 * 
 	 * @param matchId
+	 * @throws Exception
 	 */
-	public void deleteMatch(String matchId) {
+	public void deleteMatch(String matchId) throws Exception {
 		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
 		persistence.removeMatch(match);
 	}
 
@@ -898,22 +1081,33 @@ public class BilliardsFacade {
 	 */
 	public String getMatchByDate(String leagueId, String startDate,
 			String endDate, Integer index) throws Exception {
+		Date sDate = null;
+		Date eDate = null;
 		try {
-			Date sDate = dateFomat.parse(startDate);
-			Date eDate = dateFomat.parse(endDate);
-			League league = persistence.findLeagueById(leagueId);
-			ArrayList<Match> list = persistence.findMatchesByDate(league,
-					sDate, eDate);
-			Collections.sort(list, new Comparator<Match>() {
-				public int compare(Match o1, Match o2) {
-					return o1.getCreationDate().compareTo(o2.getCreationDate());
-				}
-			});
-
-			return list.get(index - 1).getMatchId();
-		} catch (ParseException e) {
+			sDate = dateFormat.parse(startDate);
+			eDate = dateFormat.parse(endDate);
+		} catch (Exception e) {
 			throw new Exception("Invalid date");
 		}
+		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
+			throw new Exception("Unknown league");
+		}
+
+		ArrayList<Match> list = persistence.findMatchesByDate(league, sDate,
+				eDate);
+		Collections.sort(list, new Comparator<Match>() {
+			public int compare(Match o1, Match o2) {
+				return o1.getCreationDate().compareTo(o2.getCreationDate());
+			}
+		});
+
+		try {
+			return list.get(index - 1).getMatchId();
+		} catch (Exception e) {
+			throw new Exception("Invalid index");
+		}
+
 	}
 
 	/**
@@ -928,23 +1122,37 @@ public class BilliardsFacade {
 	 */
 	public String getMatchByDate(String userId, String leagueId,
 			String startDate, String endDate, Integer index) throws Exception {
+		Date sDate = null;
+		Date eDate = null;
 		try {
-			Date sDate = dateFomat.parse(startDate);
-			Date eDate = dateFomat.parse(endDate);
-			League league = persistence.findLeagueById(leagueId);
-			User user = persistence.findUserById(userId);
-			ArrayList<Match> list = persistence.findMatchesByDate(user, league,
-					sDate, eDate);
-			Collections.sort(list, new Comparator<Match>() {
-				public int compare(Match o1, Match o2) {
-					return o1.getCreationDate().compareTo(o2.getCreationDate());
-				}
-			});
-
-			return list.get(index - 1).getMatchId();
-		} catch (ParseException e) {
+			sDate = dateFormat.parse(startDate);
+			eDate = dateFormat.parse(endDate);
+		} catch (Exception e) {
 			throw new Exception("Invalid date");
 		}
+		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
+			throw new Exception("Unknown league");
+		}
+		User user = persistence.findUserById(userId);
+		if (user == null) {
+			throw new Exception("Unknown user");
+		}
+
+		ArrayList<Match> list = persistence.findMatchesByDate(user, league,
+				sDate, eDate);
+		Collections.sort(list, new Comparator<Match>() {
+			public int compare(Match o1, Match o2) {
+				return o1.getCreationDate().compareTo(o2.getCreationDate());
+			}
+		});
+
+		try {
+			return list.get(index - 1).getMatchId();	
+		} catch (Exception e) {
+			throw new Exception("Invalid index");
+		}
+		
 
 	}
 }
