@@ -10,9 +10,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
+import br.edu.ufcg.psoo.billiards.beans.Match;
 import br.edu.ufcg.psoo.billiards.beans.User;
 import br.edu.ufcg.psoo.billiards.beans.UserLeague;
-import br.edu.ufcg.psoo.billiards.beans.Match;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
