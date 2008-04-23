@@ -1185,8 +1185,6 @@ public class BilliardsFacade {
 		map.put("seasonLosses", getNumberOfLosses(userId, leagueId));
 		map.put("seasonWins", getNumberOfWins(userId, leagueId));
 
-		// TODO Implementar Excecao "Division by zero in standings expression"
-		
 		String ret = billiardsUtil.evaluateExpression(league.getStandingExpression(), map);
 		return ret;
 
