@@ -10,7 +10,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import br.edu.ufcg.psoo.billiards.beans.League;
@@ -20,6 +22,8 @@ import br.edu.ufcg.psoo.billiards.beans.UserLeague;
 import br.edu.ufcg.psoo.billiards.persistence.PersistenceIF;
 import br.edu.ufcg.psoo.billiards.persistence.XMLPersistence;
 import br.edu.ufcg.psoo.billiards.util.BilliardsUtil;
+import bsh.EvalError;
+import bsh.Interpreter;
 
 /**
  * @author ivocalado
@@ -998,7 +1002,6 @@ public class BilliardsFacade {
 			throw new Exception("Users must be different");
 		}
 
-
 		Integer l = null;
 		Integer sc = null;
 		Integer lrWinner = null;
@@ -1137,11 +1140,57 @@ public class BilliardsFacade {
 		});
 
 		try {
-			return list.get(index - 1).getMatchId();	
+			return list.get(index - 1).getMatchId();
 		} catch (Exception e) {
 			throw new Exception("Invalid index");
 		}
-		
 
 	}
+
+	public void defineStandingsExpression(String leagueId, String expression)
+			throws Exception {
+		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
+			throw new Exception("Unknown league");
+		}
+		if (expression==null||expression.equals("")) {
+			throw new Exception("Syntax error in standings expression");
+		}
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("seasonWins", random.nextInt());
+		map.put("seasonLosses", random.nextInt());
+		
+		
+		billiardsUtil.evaluateExpression(expression, map);
+		
+		league.setStandingExpression(expression);
+		persistence.saveLeague(league);
+	}
+
+	public String getPlayerStanding(String userId, String leagueId)
+			throws Exception {
+		User user = persistence.findUserById(userId);
+		if (user == null) {
+			throw new Exception("Unknown user");
+		}
+
+		League league = persistence.findLeagueById(leagueId);
+		if (league == null) {
+			throw new Exception("Unknown league");
+		}
+
+		Map<String, Integer> map = new HashMap<String, Integer>();
+
+		map.put("seasonLosses", getNumberOfLosses(userId, leagueId));
+		map.put("seasonWins", getNumberOfWins(userId, leagueId));
+
+		// TODO Implementar Excecao "Division by zero in standings expression"
+		
+		String ret = billiardsUtil.evaluateExpression(league.getStandingExpression(), map);
+		return ret;
+
+	}
+
+	
 }

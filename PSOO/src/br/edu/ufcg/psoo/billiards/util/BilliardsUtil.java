@@ -4,6 +4,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Map;
+
+import bsh.EvalError;
+import bsh.Interpreter;
 
 public class BilliardsUtil {
 	/***************************************************************************
@@ -66,5 +70,38 @@ public class BilliardsUtil {
 	 */
 	public boolean validateDate(String sDate, DateFormat dateFormat, Date date) {
 		return dateFormat.format(date).equals(sDate);
+	}
+	
+	/**
+	 * 
+	 * @param expression
+	 * @param vars
+	 * @return
+	 * @throws Exception
+	 */
+	public String evaluateExpression(String expression,
+			Map<String, Integer> vars) throws Exception {
+		Interpreter interpreter = new Interpreter();
+		for (String s : vars.keySet()) {
+			try {
+				interpreter.set(s, vars.get(s));
+			} catch (EvalError e) {
+				throw new Exception("Syntax error in standings expression");
+			}
+		}
+		try {
+			Object ret = interpreter.eval(expression).toString();
+			if (ret==null) {
+				throw new Exception("Unknown variable in standings expression");
+			}
+			return ret.toString();
+		} catch (Exception e) {
+			if (e.getMessage()==null||e.getMessage().contains("illegal use of undefined variable")) {
+				throw new Exception("Unknown variable in standings expression");
+			} else if (e.getMessage().contains("Arithemetic Exception")) {
+				throw new Exception("Division by zero in standings expression");	
+			}else
+				throw new Exception("Syntax error in standings expression");
+		}
 	}
 }

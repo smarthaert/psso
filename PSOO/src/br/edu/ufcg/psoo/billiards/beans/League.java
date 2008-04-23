@@ -8,6 +8,7 @@ public class League implements Comparable {
 	private String operator;
 	private String name;	
 	private Date creationDate;	
+	private String standingExpression;
 	
 	public League() {}
 	
@@ -92,6 +93,20 @@ public class League implements Comparable {
 	public int compareTo(Object o) {
 		
 		return 0;
+	}
+
+	/**
+	 * @return the standingExpression
+	 */
+	public String getStandingExpression() {
+		return standingExpression;
+	}
+
+	/**
+	 * @param standingExpression the standingExpression to set
+	 */
+	public void setStandingExpression(String standingExpression) {
+		this.standingExpression = standingExpression;
 	}
 
 
