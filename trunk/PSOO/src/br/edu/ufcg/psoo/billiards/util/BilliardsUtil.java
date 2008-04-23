@@ -10,11 +10,8 @@ import bsh.EvalError;
 import bsh.Interpreter;
 
 public class BilliardsUtil {
-	/***************************************************************************
-	 * Shared methods ******************
-	 * 
-	 * 
-	 * /**
+	
+	/**
 	 * 
 	 * @param a
 	 * @return
