@@ -1147,27 +1147,39 @@ public class BilliardsFacade {
 
 	}
 
+	/**
+	 * 
+	 * @param leagueId
+	 * @param expression
+	 * @throws Exception
+	 */
 	public void defineStandingsExpression(String leagueId, String expression)
 			throws Exception {
 		League league = persistence.findLeagueById(leagueId);
 		if (league == null) {
 			throw new Exception("Unknown league");
 		}
-		if (expression==null||expression.equals("")) {
+		if (expression == null || expression.equals("")) {
 			throw new Exception("Syntax error in standings expression");
 		}
-		
+
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("seasonWins", random.nextInt());
 		map.put("seasonLosses", random.nextInt());
-		
-		
+
 		billiardsUtil.evaluateExpression(expression, map);
-		
+
 		league.setStandingExpression(expression);
 		persistence.saveLeague(league);
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @param leagueId
+	 * @return
+	 * @throws Exception
+	 */
 	public String getPlayerStanding(String userId, String leagueId)
 			throws Exception {
 		User user = persistence.findUserById(userId);
@@ -1185,10 +1197,10 @@ public class BilliardsFacade {
 		map.put("seasonLosses", getNumberOfLosses(userId, leagueId));
 		map.put("seasonWins", getNumberOfWins(userId, leagueId));
 
-		String ret = billiardsUtil.evaluateExpression(league.getStandingExpression(), map);
+		String ret = billiardsUtil.evaluateExpression(league
+				.getStandingExpression(), map);
 		return ret;
 
 	}
 
-	
 }
