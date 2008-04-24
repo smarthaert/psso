@@ -4,6 +4,7 @@
 package br.edu.ufcg.psoo.billiards.facade;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -315,7 +316,6 @@ public class BilliardsFacade {
 	 */
 	public Object getLeagueAttribute(String idLeague, String attribute)
 			throws Exception {
-
 		League league = persistence.findLeagueById(idLeague);
 		if (league == null) {
 			throw new Exception("There aren't league with id " + idLeague);
@@ -335,6 +335,24 @@ public class BilliardsFacade {
 			throw ex;
 		}
 
+	}
+	
+	public List<String> getAllUsersId() {
+		ArrayList<String> ids = new ArrayList<String>();
+		List<User> list = persistence.getUsers();
+		for (User user : list) {
+			ids.add(user.getUserId());
+		}
+		return ids;	
+	}
+	
+	public List<String> getAllLeaguesId() {
+		ArrayList<String> ids = new ArrayList<String>();
+		List<League> list = persistence.getLeagues();
+		for (League l : list) {
+			ids.add(l.getLeagueId());
+		}
+		return ids;	
 	}
 
 	/**
@@ -491,6 +509,14 @@ public class BilliardsFacade {
 			throw new Exception("Unknown date format");
 		}
 
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public DateFormat getDateForma() {
+		return dateFormat;
 	}
 
 	/**
