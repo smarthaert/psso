@@ -17,8 +17,6 @@ public class Match {
 	public Match() {
 	}
 
-
-	 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Match) {
@@ -35,7 +33,8 @@ public class Match {
 	 * @param matchId
 	 * @param creationDate
 	 */
-	public Match(String matchId, String userIdWinner, String userIdLoser, String leagueId, Date creationDate) {
+	public Match(String matchId, String userIdWinner, String userIdLoser,
+			String leagueId, Date creationDate) {
 		super();
 		this.userIdWinner = userIdWinner;
 		this.userIdLoser = userIdLoser;
@@ -136,7 +135,6 @@ public class Match {
 	 * @return the lenght
 	 */
 
-
 	/**
 	 * @return the score
 	 */
@@ -205,10 +203,25 @@ public class Match {
 	}
 
 	/**
-	 * @param length the length to set
+	 * @param length
+	 *            the length to set
 	 */
 	public void setLength(Integer length) {
 		this.length = length;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Objeto: [" + userIdWinner + ", " + userIdLoser + ", " + leagueId + ", "
+				+ matchId + ", " + length + ", " + score + ", "
+				+ longestRunForLoser + ", " + longestRunForWinner + ", " + creationDate + "]";
+	}
+	
 
 }

@@ -515,7 +515,7 @@ public class BilliardsFacade {
 	 * 
 	 * @return
 	 */
-	public DateFormat getDateForma() {
+	public DateFormat getDateFormat() {
 		return dateFormat;
 	}
 
@@ -928,6 +928,20 @@ public class BilliardsFacade {
 			throw new Exception("Unknown match");
 		}
 		return match.getUserIdLoser();
+	}
+	
+	/**
+	 * 
+	 * @param matchId
+	 * @return
+	 * @throws Exception
+	 */
+	public String getMatchLeague(String matchId) throws Exception {
+		Match match = persistence.findMatchById(matchId);
+		if (match == null) {
+			throw new Exception("Unknown match");
+		}
+		return match.getLeagueId();
 	}
 
 	/**
