@@ -41,7 +41,7 @@ public class League implements Comparable {
 
 	/**
 	 * Gets the League id 
-	 * @return the leagueId
+	 * @return The League id
 	 */
 	public String getLeagueId() {
 		return leagueId;
@@ -57,15 +57,15 @@ public class League implements Comparable {
 
 	/**
 	 * Gets the League operator
-	 * @return the operator
+	 * @return The League operator
 	 */
 	public String getOperator() {
 		return operator;
 	}
 
 	/**
-	 * 
-	 * @param operator the operator to set
+	 * Sets the League operator
+	 * @param operator The League operator
 	 */
 	public void setOperator(String operator) {
 		this.operator = operator;
@@ -73,28 +73,32 @@ public class League implements Comparable {
 
 
 	/**
-	 * @return the name
+	 * Gets the League name
+	 * @return 	The League name
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @param name the name to set
+	 * Sets the League name
+	 * @param name The League name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * @return the creationDate
+	 * Gets the League creation date
+	 * @return The League creation date
 	 */
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
 	/**
-	 * @param creationDate the creationDate to set
+	 * Sets the League creation date
+	 * @param creationDate The League creation date
 	 */
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
@@ -107,6 +111,7 @@ public class League implements Comparable {
 	}
 
 	/**
+	 * Gets the League standing expression 
 	 * @return the standingExpression
 	 */
 	public String getStandingExpression() {
@@ -114,7 +119,8 @@ public class League implements Comparable {
 	}
 
 	/**
-	 * @param standingExpression the standingExpression to set
+	 * Sets the League standing expression
+	 * @param standingExpression The League standing expression
 	 */
 	public void setStandingExpression(String standingExpression) {
 		this.standingExpression = standingExpression;

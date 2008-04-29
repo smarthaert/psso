@@ -11,6 +11,13 @@ public class UserLeague {
 	
 	public UserLeague() {}
 
+	/**
+	 * Creates a new relationship between User(player) and League
+	 * @param userId The User id
+	 * @param leagueId The League id
+	 * @param currentHandicap The initial Handicap
+	 * @param joinDate The join date
+	 */
 	public UserLeague(String userId, String leagueId, Integer currentHandicap, Date joinDate) {
 		this.userId 		 = userId;
 		this.leagueId	 	 = leagueId;
@@ -19,6 +26,7 @@ public class UserLeague {
 	}
 
 	/**
+	 * Gets the User id
 	 * @return the userId
 	 */
 	public String getUserId() {
@@ -26,41 +34,47 @@ public class UserLeague {
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * Sets the User id
+	 * @param userId The user id
 	 */
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
 	/**
-	 * @return the leagueId
+	 * Gets the League id
+	 * @return The league id
 	 */
 	public String getLeagueId() {
 		return leagueId;
 	}
 
 	/**
-	 * @param leagueId the leagueId to set
+	 * Sets the League id
+	 * @param leagueId The League id
 	 */
 	public void setLeagueId(String leagueId) {
 		this.leagueId = leagueId;
 	}
 
 	/**
-	 * @return the currentHandicap
+	 * Gets the current Handicap
+	 * @return The current Handicap
 	 */
 	public Integer getCurrentHandicap() {
 		return currentHandicap;
 	}
 
 	/**
-	 * @param currentHandicap the currentHandicap to set
+	 * Sets the current Hand cap
+	 * @param currentHandicap The current Handicap
 	 */
 	public void setCurrentHandicap(Integer currentHandicap) {
 		this.currentHandicap = currentHandicap;
 	}
 
 	/**
+	 * Gets the join date
 	 * @return the joinDate
 	 */
 	public Date getJoinDate() {
@@ -68,7 +82,8 @@ public class UserLeague {
 	}
 
 	/**
-	 * @param joinDate the joinDate to set
+	 * Sets the join date
+	 * @param joinDate The join date
 	 */
 	public void setJoinDate(Date joinDate) {
 		this.joinDate = joinDate;
