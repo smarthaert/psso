@@ -4,9 +4,9 @@ class Match {
 	Date creationDate;
 	String userIdWinner;
 	String userIdLoser;
-	Integer length;
-	Integer score;
-	Integer longestRunForWinner;
-	Integer longestRunForLoser;
+	String length;
+	String score;
+	String longestRunForWinner;
+	String longestRunForLoser;
 	
 }

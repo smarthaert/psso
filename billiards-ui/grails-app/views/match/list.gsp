@@ -26,12 +26,18 @@
                    	        <g:sortableColumn property="creationDate" title="Creation Date" />
                         
                    	        <g:sortableColumn property="leagueId" title="League Id" />
+                   	        
+                   	        <g:sortableColumn property="userIdWinner" title="Winner" />
+                   	        
+                   	        <g:sortableColumn property="userIdLoser" title="Loser" />
                         
                    	        <g:sortableColumn property="length" title="Length" />
                         
                    	        <g:sortableColumn property="longestRunForLoser" title="Longest Run For Loser" />
                         
                    	        <g:sortableColumn property="longestRunForWinner" title="Longest Run For Winner" />
+                   	        
+                   	        <g:sortableColumn property="score" title="Score" />
                         
                         </tr>
                     </thead>
@@ -39,17 +45,24 @@
                     <g:each in="${matchList}" status="i" var="match">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${match.id}">${match.id?.encodeAsHTML()}</g:link></td>
+                            <td><g:link action="show" id="${match.matchId}">${match.matchId?.encodeAsHTML()}</g:link></td>
                         
                             <td>${match.creationDate?.encodeAsHTML()}</td>
                         
                             <td>${match.leagueId?.encodeAsHTML()}</td>
-                        
+                            
+                            <td>${match.userIdWinner?.encodeAsHTML()}</td>
+                            
+                            <td>${match.userIdLoser?.encodeAsHTML()}</td>
+                                                   	        
+                     
                             <td>${match.length?.encodeAsHTML()}</td>
                         
                             <td>${match.longestRunForLoser?.encodeAsHTML()}</td>
                         
                             <td>${match.longestRunForWinner?.encodeAsHTML()}</td>
+                            
+                            <td>${match.score?.encodeAsHTML()}</td>
                         
                         </tr>
                     </g:each>

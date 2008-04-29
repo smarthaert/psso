@@ -42,7 +42,7 @@
                                     <label for="leagueId">League Id:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'leagueId','errors')}">
-                                    <input type="text" id="leagueId" name="leagueId" value="${fieldValue(bean:match,field:'leagueId')}"/>
+                                    <g:select name="leagueId" from="${leaguenames}"  keys="${leagueids}" />
                                 </td>
                             </tr> 
                         
@@ -51,7 +51,7 @@
                                     <label for="length">Length:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'length','errors')}">
-                                    <input type="text" id="length" name="length" value="${fieldValue(bean:match,field:'length')}" />
+                                    <input type="text" id="length" name="length" value="${fieldValue(bean:match,field:'length')}"/>
                                 </td>
                             </tr> 
                         
@@ -60,7 +60,7 @@
                                     <label for="longestRunForLoser">Longest Run For Loser:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'longestRunForLoser','errors')}">
-                                    <input type="text" id="longestRunForLoser" name="longestRunForLoser" value="${fieldValue(bean:match,field:'longestRunForLoser')}" />
+                                    <input type="text" id="longestRunForLoser" name="longestRunForLoser" value="${fieldValue(bean:match,field:'longestRunForLoser')}"/>
                                 </td>
                             </tr> 
                         
@@ -69,7 +69,16 @@
                                     <label for="longestRunForWinner">Longest Run For Winner:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'longestRunForWinner','errors')}">
-                                    <input type="text" id="longestRunForWinner" name="longestRunForWinner" value="${fieldValue(bean:match,field:'longestRunForWinner')}" />
+                                    <input type="text" id="longestRunForWinner" name="longestRunForWinner" value="${fieldValue(bean:match,field:'longestRunForWinner')}"/>
+                                </td>
+                            </tr> 
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="matchId">Match Id:</label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean:match,field:'matchId','errors')}">
+                                    <input type="text" id="matchId" name="matchId" value="${fieldValue(bean:match,field:'matchId')}"/>
                                 </td>
                             </tr> 
                         
@@ -78,7 +87,7 @@
                                     <label for="score">Score:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'score','errors')}">
-                                    <input type="text" id="score" name="score" value="${fieldValue(bean:match,field:'score')}" />
+                                    <input type="text" id="score" name="score" value="${fieldValue(bean:match,field:'score')}"/>
                                 </td>
                             </tr> 
                         
@@ -87,7 +96,7 @@
                                     <label for="userIdLoser">User Id Loser:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'userIdLoser','errors')}">
-                                    <input type="text" id="userIdLoser" name="userIdLoser" value="${fieldValue(bean:match,field:'userIdLoser')}"/>
+                                    <g:select name="userIdLoser" from="${usernames}"  keys="${userids}" />
                                 </td>
                             </tr> 
                         
@@ -96,7 +105,7 @@
                                     <label for="userIdWinner">User Id Winner:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'userIdWinner','errors')}">
-                                    <input type="text" id="userIdWinner" name="userIdWinner" value="${fieldValue(bean:match,field:'userIdWinner')}"/>
+                                    <g:select name="userIdWinner" from="${usernames}"  keys="${userids}" />
                                 </td>
                             </tr> 
                         
