@@ -256,8 +256,8 @@ public class BilliardsFacade {
 
 		for (League league : leagues) {
 			if (isLeagueMember(user.getUserId(), league.getLeagueId())) {
-				int num = getNumberOfMatches(id, league.getLeagueId());
-				for (int i = num; i >= 1; i--)
+				for (int i = 1; i <= getNumberOfMatches(id, league
+						.getLeagueId()); i--)
 					deleteMatch(getMatch(id, league.getLeagueId(), i));
 				leaveLeague(id, league.getLeagueId());
 			}
@@ -485,6 +485,8 @@ public class BilliardsFacade {
 		if (league == null)
 			throw new Exception("Unknown league");
 
+		for (int i = 1; i <= getNumberOfMatches(id); i++)
+			deleteMatch(getMatch(id, i));
 		persistence.removeLeague(league);
 	}
 
