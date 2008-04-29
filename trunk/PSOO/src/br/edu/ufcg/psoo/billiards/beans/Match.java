@@ -27,11 +27,12 @@ public class Match {
 	}
 
 	/**
-	 * @param userIdWinner
-	 * @param userIdLoser
-	 * @param leagueId
-	 * @param matchId
-	 * @param creationDate
+	 * Creates a new Match
+	 * @param userIdWinner The User winner id
+	 * @param userIdLoser The User loser id
+	 * @param leagueId The League id
+	 * @param matchId The Match id
+	 * @param creationDate Creation date
 	 */
 	public Match(String matchId, String userIdWinner, String userIdLoser,
 			String leagueId, Date creationDate) {
@@ -44,16 +45,16 @@ public class Match {
 	}
 
 	/**
-	 * 
-	 * @param matchId
-	 * @param userIdWinner
-	 * @param userIdLoser
-	 * @param leagueId
+	 * Creates a new Match
+	 * @param matchId The Match id
+	 * @param userIdWinner The User winner id
+	 * @param userIdLoser The User loser id
+	 * @param leagueId The League id
 	 * @param length
 	 * @param score
 	 * @param longestRunForWinner
 	 * @param longestRunForLoser
-	 * @param creationDate
+	 * @param creationDate Creation date
 	 */
 	public Match(String matchId, String userIdWinner, String userIdLoser,
 			String leagueId, Integer length, Integer score,
@@ -72,6 +73,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the User winner id
 	 * @return the userIdWinner
 	 */
 	public String getUserIdWinner() {
@@ -79,6 +81,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the User winner id
 	 * @param userIdWinner
 	 *            the userIdWinner to set
 	 */
@@ -87,6 +90,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the User loser id
 	 * @return the userIdLoser
 	 */
 	public String getUserIdLoser() {
@@ -94,6 +98,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the User loser id
 	 * @param userIdLoser
 	 *            the userIdLoser to set
 	 */
@@ -102,6 +107,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the League id
 	 * @return the leagueId
 	 */
 	public String getLeagueId() {
@@ -109,6 +115,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the League id
 	 * @param leagueId
 	 *            the leagueId to set
 	 */
@@ -117,6 +124,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the Match id
 	 * @return the matchId
 	 */
 	public String getMatchId() {
@@ -124,6 +132,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the Match id
 	 * @param matchId
 	 *            the matchId to set
 	 */
@@ -136,6 +145,7 @@ public class Match {
 	 */
 
 	/**
+	 * Gets the match's score attribute
 	 * @return the score
 	 */
 	public Integer getScore() {
@@ -143,6 +153,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the match's score attribute
 	 * @param score
 	 *            the score to set
 	 */
@@ -151,6 +162,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the math's longestRunForWinner attribute
 	 * @return the longestRunForWinner
 	 */
 	public Integer getLongestRunForWinner() {
@@ -158,6 +170,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the math's longestRunForWinner attribute
 	 * @param longestRunForWinner
 	 *            the longestRunForWinner to set
 	 */
@@ -166,6 +179,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the match's longestRunForLoser attribute
 	 * @return the longestRunForLoser
 	 */
 	public Integer getLongestRunForLoser() {
@@ -173,6 +187,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the match's longestRunForLoser attribute
 	 * @param longestRunForLoser
 	 *            the longestRunForLoser to set
 	 */
@@ -181,6 +196,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the match's creationDate attribute
 	 * @return the creationDate
 	 */
 	public Date getCreationDate() {
@@ -188,6 +204,7 @@ public class Match {
 	}
 
 	/**
+	 * Set the match's creationDate attribute
 	 * @param creationDate
 	 *            the creationDate to set
 	 */
@@ -196,6 +213,7 @@ public class Match {
 	}
 
 	/**
+	 * Gets the match's length attribute
 	 * @return the length
 	 */
 	public Integer getLength() {
@@ -203,6 +221,7 @@ public class Match {
 	}
 
 	/**
+	 * Sets the match's length attribute
 	 * @param length
 	 *            the length to set
 	 */

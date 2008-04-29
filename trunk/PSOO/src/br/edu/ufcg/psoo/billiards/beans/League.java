@@ -24,6 +24,13 @@ public class League implements Comparable {
 		return false;
 	}
 
+	/**
+	 * Creates a new League
+	 * @param leagueId The League id
+	 * @param userOperatorId The League operator (user)
+	 * @param name The League name
+	 * @param date The league date
+	 */
 	public League(String leagueId, String userOperatorId, String name, Date date) {
 		super();
 		this.leagueId 		= leagueId;
@@ -33,6 +40,7 @@ public class League implements Comparable {
 	}
 
 	/**
+	 * Gets the League id 
 	 * @return the leagueId
 	 */
 	public String getLeagueId() {
@@ -40,13 +48,15 @@ public class League implements Comparable {
 	}
 
 	/**
-	 * @param leagueId the leagueId to set
+	 * Sets the League id
+	 * @param leagueId The League id
 	 */
 	public void setLeagueId(String leagueId) {
 		this.leagueId = leagueId;
 	}
 
 	/**
+	 * Gets the League operator
 	 * @return the operator
 	 */
 	public String getOperator() {
@@ -54,6 +64,7 @@ public class League implements Comparable {
 	}
 
 	/**
+	 * 
 	 * @param operator the operator to set
 	 */
 	public void setOperator(String operator) {
