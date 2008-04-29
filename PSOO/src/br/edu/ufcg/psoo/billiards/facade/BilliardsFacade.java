@@ -379,19 +379,33 @@ public class BilliardsFacade {
 		if (value.equals("")) {
 			throw new Exception("Required data: league " + attribute);
 		}
+		
+	
 
 		if (attribute.equals("operator")
 				&& persistence.findUserById(value) == null) {
 			throw new Exception("Unknown user");
 		}
 
+		Object param = value;
+		
+		if (attribute.equals("creationDate")) {
+			try {
+				param = dateFormat.parse(value);
+			} catch (Exception e) {
+				throw new Exception("Invalid date");
+			}
+		}
+		
+		
+		
 		if (attribute.equals("name")
 				&& persistence.findLeagueByName(value).size() != 0) {
 			throw new Exception("This league already exists");
 		}
 
 		try { // invokes the correct method to changing
-			billiardsUtil.setField(League.class, attribute, league, value);
+			billiardsUtil.setField(League.class, attribute, league, param);
 		} catch (NoSuchFieldException e) {
 			if (attribute == null || attribute.equals("")) {
 				Exception ex = new Exception(
