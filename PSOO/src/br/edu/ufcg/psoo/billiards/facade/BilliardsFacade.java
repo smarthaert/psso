@@ -642,7 +642,6 @@ public class BilliardsFacade {
 	 * @param userId
 	 * @param leagueId
 	 * @param attribute
-	 * @return
 	 * @throws Exception
 	 */
 	public Object getUserLeagueAttribute(String userId, String leagueId,
@@ -1152,7 +1151,7 @@ public class BilliardsFacade {
 	 *            The user (winner) id
 	 * @param loserId
 	 *            The user (loser) id
-	 * @param length
+	 * @param lenght
 	 * @param score
 	 * @param longestRunForWinner
 	 * @param longestRunForLoser
@@ -1256,7 +1255,6 @@ public class BilliardsFacade {
 	 * @param endDate
 	 *            The match final date
 	 * @param index
-	 * @return
 	 * @throws Exception
 	 */
 	public String getMatchByDate(String leagueId, String startDate,
@@ -1302,7 +1300,6 @@ public class BilliardsFacade {
 	 * @param endDate
 	 *            Final date
 	 * @param index
-	 * @return
 	 * @throws Exception
 	 */
 	public String getMatchByDate(String userId, String leagueId,
