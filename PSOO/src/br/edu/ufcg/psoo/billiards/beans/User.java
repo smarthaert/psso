@@ -52,7 +52,7 @@ public class User {
 
 	/**
 	 * Gets the User id
-	 * @return the userId
+	 * @return The User Id
 	 */
 	public String getUserId() {
 		return userId;
