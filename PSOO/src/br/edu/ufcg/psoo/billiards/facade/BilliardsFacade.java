@@ -51,7 +51,9 @@ public class BilliardsFacade {
 
 	/**
 	 * This method is responsible for setting the path database
-	 * @param databaseName The database name
+	 * 
+	 * @param databaseName
+	 *            The database name
 	 */
 	public void useDatabase(String databaseName) {
 		persistence.setDatabase(databaseName);
@@ -81,12 +83,18 @@ public class BilliardsFacade {
 	/**
 	 * This method creates a new user and saves it in persistence
 	 * 
-	 * @param firstName The User first name
-	 * @param lastName The User last name
-	 * @param homePhone The User home phone
-	 * @param workPhone The User work phone
-	 * @param cellPhone The User cell phone
-	 * @param picture The User picture
+	 * @param firstName
+	 *            The User first name
+	 * @param lastName
+	 *            The User last name
+	 * @param homePhone
+	 *            The User home phone
+	 * @param workPhone
+	 *            The User work phone
+	 * @param cellPhone
+	 *            The User cell phone
+	 * @param picture
+	 *            The User picture
 	 * @return Returns the User id of the new user
 	 * @throws Exception
 	 */
@@ -105,7 +113,8 @@ public class BilliardsFacade {
 		}
 
 		if (email == null || email.equals("")) {
-			error = (error.equals("")) ? "Required data: email" : error + ", email";
+			error = (error.equals("")) ? "Required data: email" : error
+					+ ", email";
 		}
 
 		if (!error.equals(""))
@@ -178,7 +187,9 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Finds a user by last name. A regular expression can be accepted to make the search	 * 
+	 * Finds a user by last name. A regular expression can be accepted to make
+	 * the search *
+	 * 
 	 * @param lastName
 	 *            of user
 	 * @return Returns a string representing a set of users
@@ -201,7 +212,8 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets a value of a user attribute 
+	 * Gets a value of a user attribute
+	 * 
 	 * @param id
 	 * @param attribute
 	 * @return Returns an object containing the value of the given attribute
@@ -225,24 +237,43 @@ public class BilliardsFacade {
 
 	/**
 	 * This method is responsible for removing a user for a given user id
+	 * 
 	 * @param id
 	 * @throws Exception
 	 */
 	public void deleteUser(String id) throws Exception {
-		List<League> leagues = persistence.getLeagues();
-		for (League league : leagues) {
-			if (league.getOperator().equals(id)) {
-				throw new Exception("Cannot remove league operator");
-			}
+		User user = persistence.findUserById(id);
+		if (user == null) {
+			throw new Exception("Unknown user");
 		}
 
-		persistence.removeUser(persistence.findUserById(id));
+		List<League> leagues = persistence.getLeagues();
+
+		for (League league : leagues) {
+			if (league.getOperator().equals(id))
+				throw new Exception("Cannot remove league operator");
+		}
+
+		for (League league : leagues) {
+			if (isLeagueMember(user.getUserId(), league.getLeagueId())) {
+				int num = getNumberOfMatches(id, league.getLeagueId());
+				for (int i = num; i >= 1; i--)
+					deleteMatch(getMatch(id, league.getLeagueId(), i));
+				leaveLeague(id, league.getLeagueId());
+			}
+
+		}
+
+		persistence.removeUser(user);
 	}
 
 	/**
 	 * Finds a league for a given league name
-	 * @param name The name of the league
-	 * @return Returns a set containing all league name which matches the given name
+	 * 
+	 * @param name
+	 *            The name of the league
+	 * @return Returns a set containing all league name which matches the given
+	 *         name
 	 * @throws Exception
 	 */
 	public String findLeague(String name) throws Exception {
@@ -269,9 +300,12 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Stores a new league 
-	 * @param name The name of the league
-	 * @param operator The user id who will be the league operator
+	 * Stores a new league
+	 * 
+	 * @param name
+	 *            The name of the league
+	 * @param operator
+	 *            The user id who will be the league operator
 	 * @return Returns the league id
 	 * @throws Exception
 	 */
@@ -307,8 +341,11 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets a value of a given league attribute
-	 * @param idLeague The League id
-	 * @param attribute The attribute name
+	 * 
+	 * @param idLeague
+	 *            The League id
+	 * @param attribute
+	 *            The attribute name
 	 * @return Returns the attribute value
 	 * @throws Exception
 	 */
@@ -334,23 +371,25 @@ public class BilliardsFacade {
 		}
 
 	}
-	
+
 	/**
 	 * Gets all user's id
+	 * 
 	 * @return Returns a list of string with all user's id
 	 */
-	
+
 	public List<String> getAllUsersId() {
 		ArrayList<String> ids = new ArrayList<String>();
 		List<User> list = persistence.getUsers();
 		for (User user : list) {
 			ids.add(user.getUserId());
 		}
-		return ids;	
+		return ids;
 	}
-	
+
 	/**
-	 *  Gets all league's id  
+	 * Gets all league's id
+	 * 
 	 * @return Returns a list of string with all league's id
 	 */
 	public List<String> getAllLeaguesId() {
@@ -359,11 +398,12 @@ public class BilliardsFacade {
 		for (League l : list) {
 			ids.add(l.getLeagueId());
 		}
-		return ids;	
+		return ids;
 	}
 
 	/**
-	 * Gets the actual date 
+	 * Gets the actual date
+	 * 
 	 * @return Returns a string representing the actual date
 	 */
 	public String todaysDate() {
@@ -373,9 +413,13 @@ public class BilliardsFacade {
 
 	/**
 	 * Changes the value of a league attribute
-	 * @param idLeague The League id
-	 * @param attribute The league attribute name
-	 * @param value The new value for this attribute
+	 * 
+	 * @param idLeague
+	 *            The League id
+	 * @param attribute
+	 *            The league attribute name
+	 * @param value
+	 *            The new value for this attribute
 	 * @throws Exception
 	 */
 	public void changeLeagueAttribute(String idLeague, String attribute,
@@ -386,8 +430,6 @@ public class BilliardsFacade {
 		if (value.equals("")) {
 			throw new Exception("Required data: league " + attribute);
 		}
-		
-	
 
 		if (attribute.equals("operator")
 				&& persistence.findUserById(value) == null) {
@@ -395,7 +437,7 @@ public class BilliardsFacade {
 		}
 
 		Object param = value;
-		
+
 		if (attribute.equals("creationDate")) {
 			try {
 				param = dateFormat.parse(value);
@@ -403,9 +445,7 @@ public class BilliardsFacade {
 				throw new Exception("Invalid date");
 			}
 		}
-		
-		
-		
+
 		if (attribute.equals("name")
 				&& persistence.findLeagueByName(value).size() != 0) {
 			throw new Exception("This league already exists");
@@ -434,8 +474,10 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Removes a league for a given league id  
-	 * @param id The league id
+	 * Removes a league for a given league id
+	 * 
+	 * @param id
+	 *            The league id
 	 * @throws Exception
 	 */
 	public void deleteLeague(String id) throws Exception {
@@ -447,9 +489,13 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * This method is responsible for checking if a given user is member of given league 
-	 * @param idUser The User id
-	 * @param idLeague The League id
+	 * This method is responsible for checking if a given user is member of
+	 * given league
+	 * 
+	 * @param idUser
+	 *            The User id
+	 * @param idLeague
+	 *            The League id
 	 * @return Returns true or false depending if the user is member or not
 	 * @throws Exception
 	 */
@@ -469,7 +515,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Finds all leagues which the given user is member
-	 * @param userId The user id
+	 * 
+	 * @param userId
+	 *            The user id
 	 * @return Returns a string containing all leagues
 	 * @throws Exception
 	 */
@@ -492,7 +540,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Finds all users (players) which is member of a given league
-	 * @param leagueId The League id 
+	 * 
+	 * @param leagueId
+	 *            The League id
 	 * @return Returns a string containing all users
 	 * @throws Exception
 	 */
@@ -530,9 +580,10 @@ public class BilliardsFacade {
 		}
 
 	}
-	
+
 	/**
 	 * Gets the date format
+	 * 
 	 * @return Returns a DateFormat object
 	 */
 	public DateFormat getDateFormat() {
@@ -540,10 +591,14 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Joins a user (player) in a league 
-	 * @param userId The User id
-	 * @param leagueid The League id
-	 * @param initialHandcap The user initial handcap
+	 * Joins a user (player) in a league
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueid
+	 *            The League id
+	 * @param initialHandcap
+	 *            The user initial handcap
 	 * @throws Exception
 	 */
 	public void joinLeague(String userId, String leagueid, String initialHandcap)
@@ -579,7 +634,9 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets ???????????????????????????????????????????????????????????????????????????????????????????????
+	 * Gets
+	 * ???????????????????????????????????????????????????????????????????????????????????????????????
+	 * 
 	 * @param userId
 	 * @param leagueId
 	 * @param attribute
@@ -622,8 +679,11 @@ public class BilliardsFacade {
 
 	/**
 	 * Desassociate the user (player) of a given league
-	 * @param userId The User id
-	 * @param leagueId The League id
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
 	 * @throws Exception
 	 */
 	public void leaveLeague(String userId, String leagueId) throws Exception {
@@ -650,8 +710,10 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets the number of stored matches of a given league 
-	 * @param leagueId The League id
+	 * Gets the number of stored matches of a given league
+	 * 
+	 * @param leagueId
+	 *            The League id
 	 * @return Returns the number of matches
 	 * @throws Exception
 	 */
@@ -660,8 +722,10 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets all matches of a given league 
-	 * @param leagueId The League id
+	 * Gets all matches of a given league
+	 * 
+	 * @param leagueId
+	 *            The League id
 	 * @return Returns a list of all stored matches
 	 * @throws Exception
 	 */
@@ -676,8 +740,11 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the number of wins of a given user (player) in a given league
-	 * @param userId The User id
-	 * @param leagueId The League id
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
 	 * @return Returns the number of wins
 	 * @throws Exception
 	 */
@@ -704,9 +771,12 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets the number of losses of a given user (player) in a given league 
-	 * @param userId The User id
-	 * @param leagueId The League id
+	 * Gets the number of losses of a given user (player) in a given league
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
 	 * @return Returns the number of losses
 	 * @throws Exception
 	 */
@@ -732,8 +802,11 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the number of matches of a given user in a given league
-	 * @param userId The User id
-	 * @param leagueId The League id
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
 	 * @return Returns the number of matches
 	 * @throws Exception
 	 */
@@ -757,10 +830,15 @@ public class BilliardsFacade {
 
 	/**
 	 * Stores the match result of a given league
-	 * @param leagueId The League id
-	 * @param date The match date
-	 * @param winnerId The User (winner) id
-	 * @param loserId The User (loser) id
+	 * 
+	 * @param leagueId
+	 *            The League id
+	 * @param date
+	 *            The match date
+	 * @param winnerId
+	 *            The User (winner) id
+	 * @param loserId
+	 *            The User (loser) id
 	 * @return Returns the match id
 	 * @throws Exception
 	 */
@@ -772,14 +850,19 @@ public class BilliardsFacade {
 
 	/**
 	 * Stores the match result of a given league
-	 * @param leagueId The League id
-	 * @param date The match date
-	 * @param winnerId The User (winner) id
-	 * @param loserId The User (loser) id
+	 * 
+	 * @param leagueId
+	 *            The League id
+	 * @param date
+	 *            The match date
+	 * @param winnerId
+	 *            The User (winner) id
+	 * @param loserId
+	 *            The User (loser) id
 	 * @param lenght
 	 * @param score
 	 * @param longestRunForWinner
-	 * @param longestRunForLoser 
+	 * @param longestRunForLoser
 	 * @return Returns the result id
 	 * @throws Exception
 	 */
@@ -854,9 +937,12 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets a match of a given league 
-	 * @param leagueId The League id
-	 * @param index ???
+	 * Gets a match of a given league
+	 * 
+	 * @param leagueId
+	 *            The League id
+	 * @param index
+	 *            ???
 	 * @return Returns the match
 	 * @throws Exception
 	 */
@@ -877,9 +963,12 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets a match of a given league and user 
-	 * @param userId The User id
-	 * @param leagueId The League id
+	 * Gets a match of a given league and user
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
 	 * @param index
 	 * @return Returns the match
 	 * @throws Exception
@@ -922,7 +1011,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the date of a given match
-	 * @param matchId The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @return Returns a date in a string format
 	 */
 	public String getMatchDate(String matchId) {
@@ -934,7 +1025,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the winner (user) of a given match
-	 * @param matchId The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @return Returns the user id
 	 * @throws Exception
 	 */
@@ -948,7 +1041,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the loser (user) of a given match
-	 * @param matchId The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @return Returns the user id
 	 * @throws Exception
 	 */
@@ -959,10 +1054,12 @@ public class BilliardsFacade {
 		}
 		return match.getUserIdLoser();
 	}
-	
+
 	/**
 	 * Get the league of a given match
-	 * @param matchId The match id
+	 * 
+	 * @param matchId
+	 *            The match id
 	 * @return Returns the league id
 	 * @throws Exception
 	 */
@@ -974,9 +1071,11 @@ public class BilliardsFacade {
 		return match.getLeagueId();
 	}
 
-	/***
+	/***************************************************************************
 	 * Gets the length of a given match
-	 * @param matchId The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @return Returns the match's length
 	 * @throws Exception
 	 */
@@ -991,7 +1090,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the score of a given match
-	 * @param matchId  The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @return Returns the match's score
 	 * @throws Exception
 	 */
@@ -1006,7 +1107,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the LongestRunForWinner of a given match
-	 * @param matchId The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @return Returns the match's LongestRunForWinner
 	 * @throws Exception
 	 */
@@ -1021,7 +1124,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the MatchLongestRunForLoser of a given match
-	 * @param matchId  The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @return Returns the match's MatchLongestRunForLoser
 	 * @throws Exception
 	 */
@@ -1036,10 +1141,15 @@ public class BilliardsFacade {
 
 	/**
 	 * Updates the result of a given match
-	 * @param matchId  The Match id
-	 * @param date The match date
-	 * @param winnerId The user (winner) id
-	 * @param loserId The user (loser) id
+	 * 
+	 * @param matchId
+	 *            The Match id
+	 * @param date
+	 *            The match date
+	 * @param winnerId
+	 *            The user (winner) id
+	 * @param loserId
+	 *            The user (loser) id
 	 * @param length
 	 * @param score
 	 * @param longestRunForWinner
@@ -1121,7 +1231,9 @@ public class BilliardsFacade {
 
 	/**
 	 * Removes a given match
-	 * @param matchId The Match id
+	 * 
+	 * @param matchId
+	 *            The Match id
 	 * @throws Exception
 	 */
 	public void deleteMatch(String matchId) throws Exception {
@@ -1133,10 +1245,14 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets all matches of a given league and dates 
-	 * @param leagueId The League id
-	 * @param startDate The match start date
-	 * @param endDate The match final date
+	 * Gets all matches of a given league and dates
+	 * 
+	 * @param leagueId
+	 *            The League id
+	 * @param startDate
+	 *            The match start date
+	 * @param endDate
+	 *            The match final date
 	 * @param index
 	 * @return
 	 * @throws Exception
@@ -1173,11 +1289,16 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets all matches of a league and dates where a given user is 
-	 * @param userId The User id
-	 * @param leagueId The League id
-	 * @param startDate Start date
-	 * @param endDate Final date
+	 * Gets all matches of a league and dates where a given user is
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
+	 * @param startDate
+	 *            Start date
+	 * @param endDate
+	 *            Final date
 	 * @param index
 	 * @return
 	 * @throws Exception
@@ -1219,8 +1340,11 @@ public class BilliardsFacade {
 
 	/**
 	 * Defines the expression for a given league
-	 * @param leagueId The League id
-	 * @param expression The League expression
+	 * 
+	 * @param leagueId
+	 *            The League id
+	 * @param expression
+	 *            The League expression
 	 * @throws Exception
 	 */
 	public void defineStandingsExpression(String leagueId, String expression)
@@ -1245,8 +1369,11 @@ public class BilliardsFacade {
 
 	/**
 	 * Gets the player standings of a given user and league
-	 * @param userId The User id
-	 * @param leagueId The League id
+	 * 
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
 	 * @return Returns the user standings
 	 * @throws Exception
 	 */
