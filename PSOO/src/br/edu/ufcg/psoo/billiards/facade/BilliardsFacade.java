@@ -848,6 +848,8 @@ public class BilliardsFacade {
 		Match match = new Match(id, winnerId, loserId, leagueId, l, sc,
 				lrWinner, lrLoser, date2);
 		persistence.saveMatch(match);
+		persistence.putPlayerIntoLeague(league, winner, 0);
+		persistence.putPlayerIntoLeague(league, loser, 0);
 		return id;
 	}
 
