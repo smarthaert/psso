@@ -12,20 +12,20 @@ import bsh.Interpreter;
 public class BilliardsUtil {
 	
 	/**
-	 * 
-	 * @param a
-	 * @return
+	 * Sets the first letter of a given word to upper case
+	 * @param a The word
+	 * @return The word with its first letter in upper case
 	 */
 	public static String upper(String a) {
 		return a.substring(0, 1).toUpperCase() + a.substring(1);
 	}
 
 	/**
-	 * 
-	 * @param clz
-	 * @param attribute
-	 * @param ob
-	 * @return
+	 * Gets the field value thought reflection of a given class, attribute and object
+	 * @param clz The desired class
+	 * @param attribute The class attribute
+	 * @param ob The instance object
+	 * @return Returns the value of the field
 	 * @throws Exception
 	 */
 	public Object getField(Class clz, String attribute, Object ob)
@@ -40,11 +40,11 @@ public class BilliardsUtil {
 	}
 
 	/**
-	 * 
-	 * @param clz
-	 * @param attribute
-	 * @param ob
-	 * @param args
+	 * Sets the value of a field for a given class, attribute 
+	 * @param clz The class
+	 * @param attribute The class attribute
+	 * @param ob The instance object
+	 * @param args The values
 	 * @throws Exception
 	 */
 	public void setField(Class clz, String attribute, Object ob, Object args)
@@ -59,20 +59,20 @@ public class BilliardsUtil {
 	}
 	
 	/**
-	 * 
+	 * Validates a given date for a given date and format
 	 * @param sDate
-	 * @param dateFormat
+	 * @param dateFormat The desired date format
 	 * @param date
 	 * @return
-	 */
+	 *//*
 	public boolean validateDate(String sDate, DateFormat dateFormat, Date date) {
 		return dateFormat.format(date).equals(sDate);
 	}
 	
-	/**
-	 * 
-	 * @param expression
-	 * @param vars
+*/	/**
+	 * Validates the standings expression
+	 * @param expression The standing expression
+	 * @param vars The expression tokens
 	 * @return
 	 * @throws Exception
 	 */
