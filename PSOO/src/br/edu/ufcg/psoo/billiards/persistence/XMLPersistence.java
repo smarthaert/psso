@@ -96,7 +96,8 @@ public class XMLPersistence implements PersistenceIF {
 	}
 
 	/**
-	 * Save a player
+	 * Save a given player
+	 * @param user The user to be saved
 	 */
 	public void saveUser(User user) {
 		this.saveObject(user, this.xmlPathUsers);
@@ -104,6 +105,7 @@ public class XMLPersistence implements PersistenceIF {
 
 	/**
 	 * Save a league
+	 * @param league The league to be saved
 	 */
 	public void saveLeague(League league) {
 		this.saveObject(league, this.xmlPathLeagues);
@@ -261,7 +263,7 @@ public class XMLPersistence implements PersistenceIF {
 	}
 
 	/**
-	 * This method is responsible for joing a user (player) to a league
+	 * This method is responsible for joining a user (player) to a league
 	 * @param league The league which the player will be
 	 * @param user The user who will join the league 
 	 */
@@ -441,7 +443,7 @@ public class XMLPersistence implements PersistenceIF {
 
 	/**
 	 * Finds all users (players) who are in a given league
-	 * @param The league which all users (players) must be
+	 * @param league The league which all users (players) must be
 	 * @return Returns a list of User (player) objects
 	 */
 	public ArrayList<User> findUsersByLeague(League league) {

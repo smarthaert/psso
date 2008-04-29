@@ -73,7 +73,6 @@ public class BilliardsUtil {
 	 * Validates the standings expression
 	 * @param expression The standing expression
 	 * @param vars The expression tokens
-	 * @return
 	 * @throws Exception
 	 */
 	public String evaluateExpression(String expression,
