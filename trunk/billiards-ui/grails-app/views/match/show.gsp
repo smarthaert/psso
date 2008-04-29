@@ -65,6 +65,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name">Match Id:</td>
+                            
+                            <td valign="top" class="value">${match.matchId}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name">Score:</td>
                             
                             <td valign="top" class="value">${match.score}</td>
@@ -90,7 +97,7 @@
             </div>
             <div class="buttons">
                 <g:form>
-                    <input type="hidden" name="id" value="${match?.id}" />
+                    <input type="hidden" name="id" value="${match?.matchId}" />
                     <span class="button"><g:actionSubmit class="edit" value="Edit" /></span>
                     <span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
                 </g:form>

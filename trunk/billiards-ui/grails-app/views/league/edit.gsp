@@ -51,7 +51,7 @@
                                     <label for="operator">Operator:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:league,field:'operator','errors')}">
-                                    <input type="text" id="operator" name="operator" value="${fieldValue(bean:league,field:'operator')}"/>
+                                    <g:select name="operator" from="${usernames}"  keys="${userids}" />
                                 </td>
                             </tr> 
                         
