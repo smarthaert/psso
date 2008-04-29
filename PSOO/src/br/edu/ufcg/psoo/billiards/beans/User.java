@@ -14,6 +14,18 @@ public class User {
 	public User() {
 	}
 
+	/**
+	 * Creates a new User
+	 * @param userId The User id
+	 * @param firstName The User first name
+	 * @param lastName The User last name
+	 * @param homePhone The User home phone
+	 * @param workPhone The User work phone
+	 * @param cellPhone The User cell phone
+	 * @param email The User email address
+	 * @param picture The User's picture
+	 * @throws Exception
+	 */
 	public User(String userId, String firstName, String lastName,
 			String homePhone, String workPhone, String cellPhone, String email,
 			String picture) throws Exception {
@@ -39,6 +51,7 @@ public class User {
 
 
 	/**
+	 * Gets the User id
 	 * @return the userId
 	 */
 	public String getUserId() {
@@ -46,6 +59,7 @@ public class User {
 	}
 
 	/**
+	 * Sets the User id
 	 * @param userId
 	 *            the userId to set
 	 */
@@ -54,6 +68,7 @@ public class User {
 	}
 
 	/**
+	 * Gets the User first name 
 	 * @return the firstName
 	 */
 	public String getFirstName() {
@@ -61,8 +76,8 @@ public class User {
 	}
 
 	/**
-	 * 
-	 * @param firstName
+	 * Sets the User first name
+	 * @param firstName The User first name
 	 * @throws Exception
 	 */
 	public void setFirstName(String firstName) throws Exception {
@@ -74,12 +89,18 @@ public class User {
 	}
 
 	/**
+	 * Gets the User last name
 	 * @return the lastName
 	 */
 	public String getLastName() {
 		return lastName;
 	}
-
+	
+	/**
+	 * Sets the User last name
+	 * @param lastName The User last name
+	 * @throws Exception
+	 */
 	public void setLastName(String lastName) throws Exception {
 		if (lastName == null || lastName.equals("")) {
 			throw new Exception("Required data: last name");
@@ -88,6 +109,7 @@ public class User {
 	}
 
 	/**
+	 * Gets the User home phone
 	 * @return the homePhone
 	 */
 	public String getHomePhone() {
@@ -95,8 +117,8 @@ public class User {
 	}
 
 	/**
-	 * 
-	 * @param homePhone
+	 * Sets the User home phone 
+	 * @param homePhone The User home phone
 	 * @throws Exception
 	 */
 	public void setHomePhone(String homePhone) throws Exception {
@@ -110,6 +132,7 @@ public class User {
 	}
 
 	/**
+	 * Gets the User work phone
 	 * @return the workPhone
 	 */
 	public String getWorkPhone() {
@@ -117,8 +140,8 @@ public class User {
 	}
 
 	/**
-	 * @param workPhone
-	 *            the workPhone to set
+	 * Sets the User work phone
+	 * @param workPhone The User work phone
 	 */
 	public void setWorkPhone(String workPhone) throws Exception {
 		workPhone= (workPhone==null)?"":workPhone;
@@ -132,6 +155,7 @@ public class User {
 	}
 
 	/**
+	 * Gets the User email address
 	 * @return the email
 	 */
 	public String getEmail() {
@@ -139,8 +163,8 @@ public class User {
 	}
 
 	/**
-	 * @param email
-	 *            the email to set
+	 * Sets the User email address
+	 * @param email The User email address
 	 */
 	public void setEmail(String email) throws Exception {
 		if (email == null || email.equals("")) {
@@ -151,6 +175,7 @@ public class User {
 	}
 
 	/**
+	 * Gets the User picture
 	 * @return the picture
 	 */
 	public String getPicture() {
@@ -158,14 +183,15 @@ public class User {
 	}
 
 	/**
-	 * @param picture
-	 *            the picture to set
+	 * Sets the User's picture
+	 * @param picture The User's picture
 	 */
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
 
 	/**
+	 * Gets the User cell phone
 	 * @return the cellPhone
 	 */
 	public String getCellPhone() {
@@ -173,8 +199,8 @@ public class User {
 	}
 
 	/**
-	 * 
-	 * @param cellPhone
+	 * Sets the User cell phone 
+	 * @param cellPhone The User cell phone
 	 * @throws Exception
 	 */
 	public void setCellPhone(String cellPhone) throws Exception {
