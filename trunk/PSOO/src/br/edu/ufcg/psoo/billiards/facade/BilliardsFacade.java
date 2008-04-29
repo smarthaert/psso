@@ -541,7 +541,7 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Finds all users (players) which is member of a given league
+	 * Finds all users (players) who are members of a given league
 	 * 
 	 * @param leagueId
 	 *            The League id
@@ -636,12 +636,11 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets
-	 * ???????????????????????????????????????????????????????????????????????????????????????????????
+	 * Gets the UserLeague attribute value for a given attribute of the UserLeague class
 	 * 
-	 * @param userId
-	 * @param leagueId
-	 * @param attribute
+	 * @param userId The User id
+	 * @param leagueId The League id
+	 * @param attribute The attribute name
 	 * @throws Exception
 	 */
 	public Object getUserLeagueAttribute(String userId, String leagueId,
@@ -943,7 +942,6 @@ public class BilliardsFacade {
 	 * @param leagueId
 	 *            The League id
 	 * @param index
-	 *            ???
 	 * @return Returns the match
 	 * @throws Exception
 	 */
@@ -1072,7 +1070,7 @@ public class BilliardsFacade {
 		return match.getLeagueId();
 	}
 
-	/***************************************************************************
+	/**
 	 * Gets the length of a given match
 	 * 
 	 * @param matchId
