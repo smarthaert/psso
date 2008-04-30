@@ -1,4 +1,4 @@
-import br.edu.ufcg.psoo.billiards.facade.BilliardsFacade            
+import org.springframework.web.multipart.commons.CommonsMultipartFileimport br.edu.ufcg.psoo.billiards.facade.BilliardsFacade            
 class UserController {	def facadeService	
     
     def index = { redirect(action:list,params:params) }
@@ -17,14 +17,14 @@ class UserController {	def facadeService
         if(!user) {
             flash.message = "User not found with id ${params.userId}"
             redirect(action:list)
-        }
+        }        
         else { return [ user : user ] }
     }
 
     def delete = {
         def user = getUser( params.id )        
         if(user) {        	BilliardsFacade facade = facadeService.getFacade();        	String message=""        	try {
-        		facade.deleteUser(user.userId)        		message = "User ${params.id} deleted"        		        		
+        		facade.deleteUser(user.userId)      		        		URL url = servletContext.getResource("/pictures/")        		new File(new File(url.getFile()), "${user.userId}").delete()        		        		message = "User ${params.id} deleted"        		        		
         	} catch (Exception e) {
         		message = e.getMessage()
         	} finally {        		flash.message = message        		redirect(action:list)        	}        	
@@ -49,10 +49,10 @@ class UserController {	def facadeService
     }
 
     def update = {
-        def user = getUser( params.userId )
+        def user = getUser( params.id )        println "Ivo"
         if(user) {
-            user.properties = params                        BilliardsFacade facade = facadeService.getFacade();            try {
-        		facade.changeUserAttribute(user.userId,"firstName", user.firstName);            	facade.changeUserAttribute(user.userId,"lastName", user.lastName);            	facade.changeUserAttribute(user.userId, "homePhone", user.homePhone);            	facade.changeUserAttribute(user.userId, "workPhone", user.workPhone);            	facade.changeUserAttribute(user.userId, "cellPhone", user.cellPhone);            	facade.changeUserAttribute(user.userId, "email", user.email);            	facade.changeUserAttribute(user.userId, "picture", user.picture);            	flash.message = "User ${params.id} updated"                redirect(action:show,id:user.id)            	
+            user.properties = params                                                BilliardsFacade facade = facadeService.getFacade();            try {            	CommonsMultipartFile file = request.getFile("picture")            	String firstName = user.firstName                String lastName = user.lastName                String homePhone = user.homePhone                String workPhone = user.workPhone                String cellPhone = user.cellPhone                String email = user.email                String picture = null                if (file && !file.isEmpty() ) {                	if (file.getContentType().startsWith("image")) {                		picture  = file.getOriginalFilename()                	} else                		throw new Exception("Invalid picture format")                }            	
+        		facade.changeUserAttribute(user.userId,"firstName", firstName);            	facade.changeUserAttribute(user.userId,"lastName", lastName);            	facade.changeUserAttribute(user.userId, "homePhone", homePhone);            	facade.changeUserAttribute(user.userId, "workPhone", workPhone);            	facade.changeUserAttribute(user.userId, "cellPhone", cellPhone);            	facade.changeUserAttribute(user.userId, "email", email);            	facade.changeUserAttribute(user.userId, "picture", picture);            	            	URL url = servletContext.getResource("/pictures/")            	File f = new File(new File(url.getFile()), "${user.userId}")            	if (picture!=null) {            		file.transferTo(f)            	} else            		f.delete()            	            	flash.message = "User ${params.id} updated"                redirect(action:show,id:user.userId)            	
             } catch (Exception e) {            	flash.message = e.getMessage()
             	render(view:'edit',model:[user:user])
             }
@@ -67,11 +67,16 @@ class UserController {	def facadeService
         def user = new User()
         user.properties = params
         return ['user':user]
-    }
+    }	
 
     def save = {
-        def user = new User(params)        BilliardsFacade facade = facadeService.getFacade();        try {        	String id = facade.createUser(user.firstName, user.lastName, user.homePhone, user.workPhone, user.cellPhone,        			user.email, user.picture)        	user.userId = id            flash.message = "User "+ id +" created"                 redirect(action:show,id:user.userId)
-        } catch (Exception e) {        	flash.message = e.getMessage()
+        def user = new User(params)     		        		                        BilliardsFacade facade = facadeService.getFacade();        try {            CommonsMultipartFile file = request.getFile("picture")                        String firstName = user.firstName            String lastName = user.lastName            String homePhone = user.homePhone            String workPhone = user.workPhone            String cellPhone = user.cellPhone            String email = user.email            String picture = null            if (file && !file.isEmpty() ) {
+            	if (file.getContentType().startsWith("image")) {
+            		picture  = file.getOriginalFilename()
+            	} else            		throw new Exception("Invalid picture format")
+            }                      	String id = facade.createUser(firstName, lastName, homePhone, workPhone, cellPhone,        			email, picture)        	        	user.userId = id        	if (picture!=null) {        		URL url = servletContext.getResource("/pictures/")        		file.transferTo(new File(new File(url.getFile()), "${id}"))
+        	}        	            flash.message = "User "+ id +" created"                 redirect(action:show,id:user.userId)
+        } catch (Exception e) {        	e.printStackTrace()        	flash.message = e.getMessage()
         	render(view:'create',model:[user:user])
         }
       

@@ -23,7 +23,7 @@
             </div>
             </g:hasErrors>
             <g:form method="post" >
-                <input type="hidden" name="id" value="${league?.id}" />
+                <input type="hidden" name="id" value="${league?.leagueId}" />
                 <div class="dialog">
                     <table>
                         <tbody>

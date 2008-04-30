@@ -43,7 +43,7 @@
                         
                             <td>${league.name?.encodeAsHTML()}</td>
                         
-                            <td>${league.operator?.encodeAsHTML()}</td>
+                            <td><g:link action="show" controller="user" id="${league.operator}">${league.operatorName().encodeAsHTML()}</g:link></td>
                         
                             <td>${league.standingExpression?.encodeAsHTML()}</td>
                         

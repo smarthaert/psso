@@ -71,14 +71,6 @@
                                 </td>
                             </tr> 
                         
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="matchId">Match Id:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:match,field:'matchId','errors')}">
-                                    <input type="text" id="matchId" name="matchId" value="${fieldValue(bean:match,field:'matchId')}"/>
-                                </td>
-                            </tr> 
                         
                             <tr class="prop">
                                 <td valign="top" class="name">

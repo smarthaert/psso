@@ -21,7 +21,8 @@
                     <thead>
                         <tr>
                         
-                   	        <g:sortableColumn property="id" title="Id" />
+                        
+                            <g:sortableColumn property="id" title="Id" />
                         
                    	        <g:sortableColumn property="creationDate" title="Creation Date" />
                         
@@ -48,13 +49,12 @@
                             <td><g:link action="show" id="${match.matchId}">${match.matchId?.encodeAsHTML()}</g:link></td>
                         
                             <td>${match.creationDate?.encodeAsHTML()}</td>
+                            
+							<td><g:link action="show" controller="league" id="${match.leagueId}">${match.leagueName().encodeAsHTML()}</g:link></td>
                         
-                            <td>${match.leagueId?.encodeAsHTML()}</td>
+							<td><g:link action="show" controller="user" id="${match.userIdWinner}">${match.winnerLastName().encodeAsHTML()}</g:link></td>                            
                             
-                            <td>${match.userIdWinner?.encodeAsHTML()}</td>
-                            
-                            <td>${match.userIdLoser?.encodeAsHTML()}</td>
-                                                   	        
+                            <td><g:link action="show" controller="user" id="${match.userIdLoser}">${match.loserLastName().encodeAsHTML()}</g:link></td>
                      
                             <td>${match.length?.encodeAsHTML()}</td>
                         

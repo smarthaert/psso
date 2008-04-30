@@ -7,7 +7,7 @@ class MatchController {
     def allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def list = {
-        if(!params.max) params.max = 10        BilliardsFacade facade = facadeService.getFacade();                                def leaguesIds = facade.getAllLeaguesId()                def allMatches=[]        for(i in leaguesIds) {        	def partialMatches = facade.getNumberOfMatches((String)i)        	println "valor de loops: " + partialMatches        	        	for(int k=1; k<=partialMatches; k++) {        		Match m = getMatch(facade.getMatch(i, k))        		allMatches+=m        	}        }                
+        if(!params.max) params.max = 10        BilliardsFacade facade = facadeService.getFacade();                                def leaguesIds = facade.getAllLeaguesId()                def allMatches=[]        for(i in leaguesIds) {        	def partialMatches = facade.getNumberOfMatches((String)i)        	        	for(int k=1; k<=partialMatches; k++) {        		Match m = getMatch(facade.getMatch(i, k))        		allMatches+=m        	}        }                
         [ matchList: allMatches ]
     }
 

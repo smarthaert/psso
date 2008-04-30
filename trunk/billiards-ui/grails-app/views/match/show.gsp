@@ -25,7 +25,7 @@
                         <tr class="prop">
                             <td valign="top" class="name">Id:</td>
                             
-                            <td valign="top" class="value">${match.id}</td>
+                             <td valign="top" class="value">${match.matchId}</td>
                             
                         </tr>
                     
@@ -37,9 +37,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name">League Id:</td>
+                            <td valign="top" class="name">League:</td>
                             
-                            <td valign="top" class="value">${match.leagueId}</td>
+                            <td valign="top" class="value"><g:link action="show" controller="league" id="${match.leagueId}">${match.leagueName().encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -65,13 +65,6 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name">Match Id:</td>
-                            
-                            <td valign="top" class="value">${match.matchId}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name">Score:</td>
                             
                             <td valign="top" class="value">${match.score}</td>
@@ -79,18 +72,19 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name">User Id Loser:</td>
+                            <td valign="top" class="name">User Winner:</td>
                             
-                            <td valign="top" class="value">${match.userIdLoser}</td>
+                            <td valign="top" class="value"><g:link action="show" controller="user" id="${match.userIdWinner}">${match.winnerLastName().encodeAsHTML()}</g:link></td>
+                        </tr>
+                        
+                        <tr class="prop">
+                            <td valign="top" class="name">User Loser:</td>
+                            
+                            <td valign="top" class="value"><g:link action="show" controller="user" id="${match.userIdLoser}">${match.loserLastName().encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
-                        <tr class="prop">
-                            <td valign="top" class="name">User Id Winner:</td>
-                            
-                            <td valign="top" class="value">${match.userIdWinner}</td>
-                            
-                        </tr>
+
                     
                     </tbody>
                 </table>

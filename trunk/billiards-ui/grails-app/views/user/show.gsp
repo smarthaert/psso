@@ -74,9 +74,11 @@
                         <tr class="prop">
                             <td valign="top" class="name">Picture:</td>
                             
-                            <td valign="top" class="value">${user.picture}</td>
+                            <td valign="top" class="value"><img src="/billiards-ui/pictures/${user.userId}" alt="${user.picture}" /></td>
                             
                         </tr>
+                        
+                        
                     </tbody>
                 </table>
             </div>
