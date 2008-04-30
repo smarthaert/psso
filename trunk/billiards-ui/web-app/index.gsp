@@ -4,16 +4,13 @@
 		<meta name="layout" content="main" />
     </head>
     <body>
-        <h1 style="margin-left:20px;">Welcome to Grails</h1>
-        <p style="margin-left:20px;width:80%">Congratulations, you have successfully started your first Grails application! At the moment
-        this is the default page, feel free to modify it to either redirect to a controller or display whatever
-        content you may choose. Below is a list of controllers that are currently deployed in this application,
-        click on each to execute its default action:</p>
+        <h1 style="margin-left:20px;">Welcome to the Billiard Management System</h1>
+        <p style="margin-left:20px;width:80%">Hello user, the Billiard Management System can help you to manage your billiard games. With a dynamic user interface, it provides an easy way to create Players, Leagues and Matches. This is the first version of our application, so feel free for feedbacks. Start yourself following the links bellow. Have fun!</p>
         <div class="dialog" style="margin-left:20px;width:60%;">
             <ul>
-              <g:each var="c" in="${grailsApplication.controllerClasses}">
-                    <li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-              </g:each>
+            <li class="controller"><g:link controller="user">User management</g:link></li>
+            <li class="controller"><g:link controller="league">League management</g:link></li>
+            <li class="controller"><g:link controller="match">Match management</g:link></li>
             </ul>
         </div>
     </body>
