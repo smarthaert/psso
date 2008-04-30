@@ -6,5 +6,5 @@ class User {
 	String workPhone;
 	String cellPhone;
 	String email;
-	String picture;
+	String picture
 }

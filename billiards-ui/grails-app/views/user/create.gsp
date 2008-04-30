@@ -21,7 +21,7 @@
                 <g:renderErrors bean="${user}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form action="save" method="post" >
+            <g:form action="save" method="post" enctype="multipart/form-data">
                 <div class="dialog">
                     <table>
                         <tbody>
@@ -82,16 +82,14 @@
                                 </td>
                             </tr> 
                         
-                            <tr class="prop">
+                        <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="picture">Picture:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:user,field:'picture','errors')}">
-                                    <input type="text" id="picture" name="picture" value="${fieldValue(bean:user,field:'picture')}"/>
+                                    <input type="file" name="picture" />
                                 </td>
-                            </tr> 
-                        
-                        
+                         </tr> 
                         </tbody>
                     </table>
                 </div>

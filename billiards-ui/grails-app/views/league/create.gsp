@@ -25,10 +25,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
-                            
-                        
-                            <tr class="prop">
+                        <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="name">Name:</label>
                                 </td>
@@ -43,11 +40,18 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:league,field:'operator','errors')}">
                                 <g:select name="operator" from="${usernames}"  keys="${userids}" />
-
-
-                                    
                                 </td>
                             </tr> 
+                            
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="standingExpression">Standing Expression:</label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean:league,field:'standingExpression','errors')}">
+                                    <input type="text" id="standingExpression" name="standingExpression" value="${fieldValue(bean:league,field:'standingExpression')}"/>
+                                </td>
+                            </tr> 
+                                                        
                         </tbody>
                     </table>
                 </div>

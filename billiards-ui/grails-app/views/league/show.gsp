@@ -13,7 +13,7 @@
             <span class="menuButton"><g:link class="create" action="create">New League</g:link></span>
         </div>
         <div class="body">
-            <h1>Show League</h1>
+            <h1>League Description</h1>
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
@@ -46,7 +46,7 @@
                         <tr class="prop">
                             <td valign="top" class="name">Operator:</td>
                             
-                            <td valign="top" class="value">${league.operator}</td>
+                            <td valign="top" class="value"><g:link action="show" controller="user" id="${league.operator}">${league.operatorName().encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -67,6 +67,41 @@
                     <span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
                 </g:form>
             </div>
+			
+			&nbsp&nbsp&nbsp&nbsp
+			<h2>League's Members</h2>
+            <div class="list">
+                <table>
+                    <thead>
+                        <tr>
+                        
+                   	        <g:sortableColumn property="lastName" title="Player" />
+                        
+                   	        <g:sortableColumn property="numberOfWins" title="Number of wins" />
+                        
+                   	        <g:sortableColumn property="numberOfLosses" title="Number of Losses" />
+                   	        
+                   	        <g:sortableColumn property="playerStanding" title="Player Standing" />
+
+                    </thead>
+                    <tbody>
+                    <g:each in="${playerList}" status="i" var="user">
+                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+                        
+                            <td><g:link action="show" controller="user" id="${user.userId}">${user.lastName?.encodeAsHTML()}</g:link></td>
+                        	
+                        	 <td>${user.numberOfWins?.encodeAsHTML()}</td>
+                        	
+                            <td>${user.numberOfLosses?.encodeAsHTML()}</td>
+                            
+                            <td>${user.playerStanding?.encodeAsHTML()}</td>
+
+                        </tr>
+                    </g:each>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
     </body>
 </html>
