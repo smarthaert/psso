@@ -17,8 +17,8 @@ class UserController {	def facadeService
         if(!user) {
             flash.message = "User not found with id ${params.userId}"
             redirect(action:list)
-        }        
-        else { return [ user : user ] }
+        }        
+        else {        	BilliardsFacade facade = facadeService.getFacade()        	def leagues = facade.getAllLeaguesId()        	def playerList = []        	        	String userId = user.userId        	for(i in leagues) {        		String id = (String)i        		        		if (facade.isLeagueMember(userId, id)) {        			int j = facade.getNumberOfMatches(userId, id)        			for(int k=1; k<=j; k++) {        				String matchId = facade.getMatch(userId, id, k)        				def newPlayer = new PlayerMatch()        				newPlayer.matchId = matchId        				newPlayer.creationDate = facade.getMatchDate(matchId)        				String oId = facade.getMatchWinner(matchId)        				newPlayer.opponent = (oId.equals(userId))?facade.getMatchLoser(matchId):oId;        				playerList+=newPlayer	        			}        		}        	}        	return [ user : user, 'matchesList': playerList]         }
     }
 
     def delete = {
@@ -49,8 +49,7 @@ class UserController {	def facadeService
     }
 
     def update = {
-        def user = getUser( params.id )        println "Ivo"
-        if(user) {
+        def user = getUser( params.id )        if(user) {
             user.properties = params                                                BilliardsFacade facade = facadeService.getFacade();            try {            	CommonsMultipartFile file = request.getFile("picture")            	String firstName = user.firstName                String lastName = user.lastName                String homePhone = user.homePhone                String workPhone = user.workPhone                String cellPhone = user.cellPhone                String email = user.email                String picture = null                if (file && !file.isEmpty() ) {                	if (file.getContentType().startsWith("image")) {                		picture  = file.getOriginalFilename()                	} else                		throw new Exception("Invalid picture format")                }            	
         		facade.changeUserAttribute(user.userId,"firstName", firstName);            	facade.changeUserAttribute(user.userId,"lastName", lastName);            	facade.changeUserAttribute(user.userId, "homePhone", homePhone);            	facade.changeUserAttribute(user.userId, "workPhone", workPhone);            	facade.changeUserAttribute(user.userId, "cellPhone", cellPhone);            	facade.changeUserAttribute(user.userId, "email", email);            	facade.changeUserAttribute(user.userId, "picture", picture);            	            	URL url = servletContext.getResource("/pictures/")            	File f = new File(new File(url.getFile()), "${user.userId}")            	if (picture!=null) {            		file.transferTo(f)            	} else            		f.delete()            	            	flash.message = "User ${params.id} updated"                redirect(action:show,id:user.userId)            	
             } catch (Exception e) {            	flash.message = e.getMessage()
