@@ -19,8 +19,12 @@ class LeagueController {
             redirect(action:list)
         }
         else {        	BilliardsFacade facade = facadeService.getFacade();        	def users = facade.getAllUsersId()        	def playerList = []        	String leagueId = league.leagueId        	for(i in users) {        		String id = (String)i        		        		if (facade.isLeagueMember(id, leagueId)) {
-        			def newPlayer = new Player()        			newPlayer.userId = id        			newPlayer.lastName = facade.getUserAttribute(id, "lastName")        			newPlayer.numberOfWins = String.valueOf(facade.getNumberOfWins(id, leagueId))        			newPlayer.numberOfLosses = String.valueOf(facade.getNumberOfLosses(id, leagueId))        			newPlayer.playerStanding = facade.getPlayerStanding(id, leagueId)        			        			playerList+=newPlayer
-        		}        	}        	        	def orderBy = params.sort        	        	if (orderBy) {        		for(i in playerList)        			i.orderBy(orderBy) 
+        			def newPlayer = new Player()        			newPlayer.userId = id        			newPlayer.lastName = facade.getUserAttribute(id, "lastName")        			newPlayer.numberOfWins = String.valueOf(facade.getNumberOfWins(id, leagueId))        			newPlayer.numberOfLosses = String.valueOf(facade.getNumberOfLosses(id, leagueId))        			try {
+        				newPlayer.playerStanding = facade.getPlayerStanding(id, leagueId)
+        			} catch (Exception e) {
+        				newPlayer.playerStanding = "Undefined"
+        			}        			        			        			playerList+=newPlayer
+        		}        	}        	        	def orderBy = params.sort        	        	        	        	if (orderBy) {        		for(i in playerList)        			i.orderBy(orderBy) 
         		Collections.sort(playerList);        		if (params.order.equals("desc")) {
         			Player[] players = playerList.toArray()        			playerList.clear()        			for(int i=players.length-1; i>=0; i--) {        				playerList+=players[i]        			}
         		}
