@@ -10,7 +10,7 @@ class Match {	def facadeService
 	String longestRunForLoser;
 	
 	def leagueName = {
-		def facade = facadeService.getFacade()		String ret = (String) facade.getLeagueAttribute(leagueId, "name")		println "Passou Aqui!!"		println leagueId		println ret		return ret
+		def facade = facadeService.getFacade()		String ret = (String) facade.getLeagueAttribute(leagueId, "name")		return ret
 	}
 	
 	def winnerLastName = {

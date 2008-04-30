@@ -1,4 +1,4 @@
-import javax.xml.crypto.dsig.spec.ExcC14NParameterSpecimport org.apache.tools.ant.util.LeadPipeInputStreamimport br.edu.ufcg.psoo.billiards.facade.BilliardsFacade            
+import java.util.Comparator;import br.edu.ufcg.psoo.billiards.facade.BilliardsFacade            
 class LeagueController {
 	def userService	def facadeService
     def index = { redirect(action:list,params:params) }
@@ -18,9 +18,13 @@ class LeagueController {
             flash.message = "League not found with id ${params.id}"
             redirect(action:list)
         }
-        else {        	BilliardsFacade facade = facadeService.getFacade();        	def users = facade.getAllUsersId()        	def playerList = []        	        	String leagueId = league.leagueId        	for(i in users) {        		String id = (String)i        		        		if (facade.isLeagueMember(id, leagueId)) {
+        else {        	BilliardsFacade facade = facadeService.getFacade();        	def users = facade.getAllUsersId()        	def playerList = []        	String leagueId = league.leagueId        	for(i in users) {        		String id = (String)i        		        		if (facade.isLeagueMember(id, leagueId)) {
         			def newPlayer = new Player()        			newPlayer.userId = id        			newPlayer.lastName = facade.getUserAttribute(id, "lastName")        			newPlayer.numberOfWins = String.valueOf(facade.getNumberOfWins(id, leagueId))        			newPlayer.numberOfLosses = String.valueOf(facade.getNumberOfLosses(id, leagueId))        			newPlayer.playerStanding = facade.getPlayerStanding(id, leagueId)        			        			playerList+=newPlayer
-        		}        	}        	return [ league : league, 'playerList': playerList]         }
+        		}        	}        	        	def orderBy = params.sort        	        	if (orderBy) {        		for(i in playerList)        			i.orderBy(orderBy) 
+        		Collections.sort(playerList);        		if (params.order.equals("desc")) {
+        			Player[] players = playerList.toArray()        			playerList.clear()        			for(int i=players.length-1; i>=0; i--) {        				playerList+=players[i]        			}
+        		}
+        	}        	        	return [ league : league, 'playerList': playerList]         }
     }
 
     def delete = {
