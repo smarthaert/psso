@@ -73,7 +73,7 @@ class UserController {	def facadeService
             	if (file.getContentType().startsWith("image")) {
             		picture  = file.getOriginalFilename()
             	} else            		throw new Exception("Invalid picture format")
-            }                      	String id = facade.createUser(firstName, lastName, homePhone, workPhone, cellPhone,        			email, picture)        	        	user.userId = id        	if (picture!=null) {        		URL url = servletContext.getResource("/pictures/")        		file.transferTo(new File(new File(url.getFile()), "${id}"))
+            }                      	String id = facade.createUser(firstName, lastName, homePhone, workPhone, cellPhone,        			email, picture)        	        	user.userId = id        	if (picture!=null) {        		URL url = servletContext.getResource("/pictures/")        		file.transferTo(new File(new File(url.getFile()), "${id}"))
         	}        	            flash.message = "User "+ id +" created"                 redirect(action:show,id:user.userId)
         } catch (Exception e) {        	e.printStackTrace()        	flash.message = e.getMessage()
         	render(view:'create',model:[user:user])
