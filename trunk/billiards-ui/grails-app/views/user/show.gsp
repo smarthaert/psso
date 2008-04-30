@@ -22,7 +22,7 @@
                     <tbody>
 
                         <tr class="prop">
-                            <td valign="top" class="name">User Id:</td>
+                            <td valign="top" class="name">Id:</td>
                             
                             <td valign="top" class="value">${user.userId}</td>
                             
@@ -89,6 +89,38 @@
                     <span class="button"><g:actionSubmit class="delete" onclick="return confirm('Are you sure?');" value="Delete" /></span>
                 </g:form>
             </div>
+            
+            &nbsp&nbsp&nbsp&nbsp
+			<h2>Member's Matches</h2>
+            <div class="list">
+                <table>
+                    <thead>
+                        <tr>
+                        
+                   	        <g:sortableColumn property="creationDate" title="Creation Date" />
+                        
+                   	        <g:sortableColumn property="opponent" title="Opponent" />
+                        
+                   	        <g:sortableColumn property="matchId" title="Match Description" />
+                   	        
+                    </thead>
+                    <tbody>
+                    <g:each in="${matchesList}" status="i" var="match">
+                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+                        
+                            <td>${match.creationDate?.encodeAsHTML()}</td>
+                            
+                            <td><g:link action="show" id="${match.opponent}">${match.operatorName().encodeAsHTML()}</g:link></td>                        	
+                        	 
+                        	<td><g:link action="show" controller="match" id="${match.matchId}">see more</g:link></td>
+
+                        </tr>
+                    </g:each>
+                    </tbody>
+                </table>
+            </div>
+            
+            
         </div>
     </body>
 </html>

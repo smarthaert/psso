@@ -62,8 +62,7 @@ class MatchController {
 
     def create = {
         def match = new Match()
-        match.properties = params        def leagues = leagueService.getLeaguesNames()        println leagues
-        return ['match':match, 'leaguenames':leagueService.getLeaguesNames(),                'leagueids':leagueService.getLeagueIds(), 'usernames':userService.getUserLastNames(),                'userids':userService.getUserIds()]
+        match.properties = params        def leagues = leagueService.getLeaguesNames()        return ['match':match, 'leaguenames':leagueService.getLeaguesNames(),                'leagueids':leagueService.getLeagueIds(), 'usernames':userService.getUserLastNames(),                'userids':userService.getUserIds()]
     }
 
     def save = {
