@@ -447,7 +447,8 @@ public class BilliardsFacade {
 		}
 
 		if (attribute.equals("name")
-				&& persistence.findLeagueByName(value).size() != 0) {
+				&& persistence.findLeagueByName(value).size() != 0
+				&& !getLeagueAttribute(idLeague, "name").equals(value)) {
 			throw new Exception("This league already exists");
 		}
 
@@ -636,11 +637,15 @@ public class BilliardsFacade {
 	}
 
 	/**
-	 * Gets the UserLeague attribute value for a given attribute of the UserLeague class
+	 * Gets the UserLeague attribute value for a given attribute of the
+	 * UserLeague class
 	 * 
-	 * @param userId The User id
-	 * @param leagueId The League id
-	 * @param attribute The attribute name
+	 * @param userId
+	 *            The User id
+	 * @param leagueId
+	 *            The League id
+	 * @param attribute
+	 *            The attribute name
 	 * @throws Exception
 	 */
 	public Object getUserLeagueAttribute(String userId, String leagueId,
