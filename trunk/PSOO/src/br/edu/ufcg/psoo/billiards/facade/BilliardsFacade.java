@@ -1230,7 +1230,8 @@ public class BilliardsFacade {
 		match.setLongestRunForLoser(lrLoser);
 
 		persistence.saveMatch(match);
-
+		persistence.putPlayerIntoLeague(persistence.findLeagueById(match.getLeagueId()), winner, 0);
+		persistence.putPlayerIntoLeague(persistence.findLeagueById(match.getLeagueId()), loser, 0);
 	}
 
 	/**
