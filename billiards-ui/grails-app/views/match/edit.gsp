@@ -23,7 +23,7 @@
             </div>
             </g:hasErrors>
             <g:form method="post" >
-                <input type="hidden" name="id" value="${match?.id}" />
+                <input type="hidden" name="id" value="${match?.matchId}" />
                 <div class="dialog">
                     <table>
                         <tbody>
@@ -37,14 +37,6 @@
                                 </td>
                             </tr> 
                         
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="leagueId">League Id:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:match,field:'leagueId','errors')}">
-                                    <g:select name="leagueId" from="${leaguenames}"  keys="${leagueids}" />
-                                </td>
-                            </tr> 
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -53,7 +45,16 @@
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'length','errors')}">
                                     <input type="text" id="length" name="length" value="${fieldValue(bean:match,field:'length')}"/>
                                 </td>
-                            </tr> 
+                            </tr>
+                            
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="score">Score:</label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean:match,field:'score','errors')}">
+                                    <input type="text" id="score" name="score" value="${fieldValue(bean:match,field:'score')}"/>
+                                </td>
+                            </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -73,27 +74,10 @@
                                 </td>
                             </tr> 
                         
+
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="matchId">Match Id:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:match,field:'matchId','errors')}">
-                                    <input type="text" id="matchId" name="matchId" value="${fieldValue(bean:match,field:'matchId')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="score">Score:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean:match,field:'score','errors')}">
-                                    <input type="text" id="score" name="score" value="${fieldValue(bean:match,field:'score')}"/>
-                                </td>
-                            </tr> 
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="userIdLoser">User Id Loser:</label>
+                                    <label for="userIdLoser">User Loser:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'userIdLoser','errors')}">
                                     <g:select name="userIdLoser" from="${usernames}"  keys="${userids}" />
@@ -102,7 +86,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="userIdWinner">User Id Winner:</label>
+                                    <label for="userIdWinner">User Winner:</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:match,field:'userIdWinner','errors')}">
                                     <g:select name="userIdWinner" from="${usernames}"  keys="${userids}" />

@@ -47,10 +47,10 @@ class MatchController {
     }
 
     def update = {
-        def match = getMatch( params.matchId )
+        def match = getMatch( params.id )
         if(match) {
-            match.properties = params            BilliardsFacade facade = facadeService.getFacade();            try {
-            	facade.updateMatchResult(match.matchId, new StringBuilder(facade.getDateFormat().format(match.creationDate)).            			toString(), match.userIdWinner, match.userIdLoser,            			String.valueOf(match.length), String.valueOf(match.score),            			String.valueOf(match.longestRunForWinner), String.valueOf(match.longestRunForLoser))            			flash.message = "Match ${params.id} updated"            			redirect(action:show,id:match.matchId)
+            match.properties = params            BilliardsFacade facade = facadeService.getFacade();            try {            	String lenght = (!match.length.equals(""))?match.length:null;    			String score  = (!match.score.equals(""))?match.score:null;    			String lrw = (!match.longestRunForWinner.equals(""))?match.longestRunForWinner:null;    			String lrl = (!match.longestRunForLoser.equals(""))?match.longestRunForLoser:null;            	
+            	facade.updateMatchResult(match.matchId, new StringBuilder(facade.getDateFormat().format(match.creationDate)).            			toString(), match.userIdWinner, match.userIdLoser, lenght, score, lrw, lrl)            			flash.message = "Match ${params.id} updated"            			redirect(action:show,id:match.matchId)
             } catch (Exception e) {
             	flash.message = e.getMessage()                render(view:'edit',model:[match : match, 'leaguenames':leagueService.getLeaguesNames(),                                          'leagueids':leagueService.getLeagueIds(), 'usernames':userService.getUserLastNames(),                                          'userids':userService.getUserIds()])           	
             }        }
