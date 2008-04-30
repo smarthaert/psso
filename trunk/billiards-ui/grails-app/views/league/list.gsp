@@ -52,9 +52,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${League.count()}" />
-            </div>
+
+
+
         </div>
     </body>
 </html>
