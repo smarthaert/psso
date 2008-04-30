@@ -257,7 +257,7 @@ public class BilliardsFacade {
 		for (League league : leagues) {
 			if (isLeagueMember(user.getUserId(), league.getLeagueId())) {
 				for (int i = 1; i <= getNumberOfMatches(id, league
-						.getLeagueId()); i--)
+						.getLeagueId()); i++)
 					deleteMatch(getMatch(id, league.getLeagueId(), i));
 				leaveLeague(id, league.getLeagueId());
 			}
